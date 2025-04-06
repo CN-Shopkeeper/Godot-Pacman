@@ -11,8 +11,12 @@ extends Control
 @onready var credits_button: AnimatedButton = $CenterContainer/MainButtons/Credits
 @onready var settings_menu_back_button: AnimatedButton = $CenterContainer/SettingsMenu/Back
 @onready var credits_menu_back_button: AnimatedButton = $CenterContainer/CreditsMenu/Back
+@onready var background: ColorRect = $Background
+
+const GAME_MAP_PATH = "res://scenes/game_maze.tscn"
 
 func _ready() -> void:
+	background.color = GlobalVariables.main_menu_color
 	SettingsManager.load_settings()
 	play_button.grab_focus()
 	fullscreen_check_box.set_pressed_no_signal(true if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN else false)
@@ -21,7 +25,23 @@ func _ready() -> void:
 	sfx_vol_slider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
 
 func _on_play_button_pressed() -> void:
-	pass
+	IndieBlueprintSceneTransitioner.transition_to(
+		GAME_MAP_PATH,
+		IndieBlueprintPremadeTransitions.Dissolve,
+		IndieBlueprintPremadeTransitions.Dissolve,
+		{
+	"in": {
+		"color": GlobalVariables.scene_transition_color,
+		"duration": 1,
+		"texture": IndieBlueprintPremadeTransitions.Squares
+	},
+	"out": {
+		"color": GlobalVariables.scene_transition_color,
+		"duration": 1,
+		"texture": IndieBlueprintPremadeTransitions.Squares
+	},
+}
+		)
 
 func _on_settings_button_pressed() -> void:
 	main_buttons_container.hide()
