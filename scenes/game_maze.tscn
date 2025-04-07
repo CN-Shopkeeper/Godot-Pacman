@@ -1,7 +1,150 @@
-[gd_scene load_steps=3 format=3 uid="uid://cu4klmtr45gw0"]
+[gd_scene load_steps=6 format=3 uid="uid://cu4klmtr45gw0"]
 
 [ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://script/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
+[ext_resource type="Texture2D" uid="uid://cxpedg0by0dbv" path="res://assets/Dungeon_WallsAndFloors.png" id="3_v7xv8"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvddi"]
+texture = ExtResource("3_v7xv8")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+0:10/0 = 0
+1:10/0 = 0
+2:10/0 = 0
+3:10/0 = 0
+4:10/0 = 0
+5:10/0 = 0
+0:11/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+5:11/0 = 0
+0:12/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+5:12/0 = 0
+0:13/0 = 0
+1:13/0 = 0
+2:13/0 = 0
+3:13/0 = 0
+4:13/0 = 0
+5:13/0 = 0
+0:14/0 = 0
+1:14/0 = 0
+1:14/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+5:14/0 = 0
+0:15/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+4:15/0 = 0
+5:15/0 = 0
+0:16/0 = 0
+1:16/0 = 0
+2:16/0 = 0
+3:16/0 = 0
+4:16/0 = 0
+5:16/0 = 0
+0:17/0 = 0
+1:17/0 = 0
+2:17/0 = 0
+3:17/0 = 0
+4:17/0 = 0
+5:17/0 = 0
+0:18/0 = 0
+1:18/0 = 0
+2:18/0 = 0
+3:18/0 = 0
+4:18/0 = 0
+5:18/0 = 0
+0:19/0 = 0
+1:19/0 = 0
+2:19/0 = 0
+3:19/0 = 0
+4:19/0 = 0
+5:19/0 = 0
+0:20/0 = 0
+1:20/0 = 0
+2:20/0 = 0
+3:20/0 = 0
+4:20/0 = 0
+5:20/0 = 0
+0:21/0 = 0
+1:21/0 = 0
+2:21/0 = 0
+3:21/0 = 0
+4:21/0 = 0
+5:21/0 = 0
+0:22/0 = 0
+1:22/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_qftkq"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_yvddi")
 
 [node name="GameMaze" type="Control"]
 layout_mode = 3
@@ -12,6 +155,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jvsv4")
 
+[node name="Maze" type="Node2D" parent="."]
+
+[node name="TileLayer" type="TileMapLayer" parent="Maze"]
+position = Vector2(448, 60)
+scale = Vector2(2, 2)
+tile_set = SubResource("TileSet_qftkq")
+
 [node name="BackToMainMenu" type="CenterContainer" parent="."]
 visible = false
 layout_mode = 1
@@ -20,6 +170,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="BackToMainMenu"]
 custom_minimum_size = Vector2(800, 500)
@@ -29,6 +180,7 @@ color = Color(1, 0.556863, 0.321569, 1)
 [node name="VBoxContainer" type="VBoxContainer" parent="BackToMainMenu"]
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="BackToMainMenu/VBoxContainer"]
 custom_minimum_size = Vector2(800, 300)
@@ -64,6 +216,14 @@ theme_override_font_sizes/font_size = 60
 text = "NO"
 script = ExtResource("2_hlrt2")
 metadata/_custom_type_script = "uid://b18i4t8jf0d3j"
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -4096
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
 
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_button_pressed"]
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/No" to="." method="_on_no_button_pressed"]
