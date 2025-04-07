@@ -1,7 +1,7 @@
 class_name MazeGenerator
 extends Resource
 
-enum Maze_tile {WALL, PATH}
+enum Maze_tile {WALL, PATH, GHOST_SPAWN, GHOST_SPAWN_BODER}
 
 const half_cell_height = 9
 const half_cell_width = 5
@@ -54,6 +54,23 @@ func generate_maze_tiles():
 			_set_maze_tile(maze_tiles, x + 2, y + 1, tile)
 			# x方向对称
 			_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -1-2- x, y + 1, tile)
+
+	# Ghost出生区的墙壁
+	for x in range(11, 21):
+		_set_maze_tile(maze_tiles, x, 11, Maze_tile.GHOST_SPAWN_BODER)
+		_set_maze_tile(maze_tiles, x, 15, Maze_tile.GHOST_SPAWN_BODER)
+
+	for y in range(11, 16):
+		_set_maze_tile(maze_tiles, 11, y, Maze_tile.GHOST_SPAWN_BODER)
+		_set_maze_tile(maze_tiles, 20, y, Maze_tile.GHOST_SPAWN_BODER)
+
+
+	# Ghost出生区
+	for x in range(12, 20):
+		for y in range(12, 15):
+			_set_maze_tile(maze_tiles, x, y, Maze_tile.GHOST_SPAWN)
+	for x in range(14, 18):
+		_set_maze_tile(maze_tiles, x, 11, Maze_tile.GHOST_SPAWN)
 	return maze_tiles
 
 func _generate_maze_paths():

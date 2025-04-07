@@ -31,20 +31,28 @@ texture = ExtResource("3_v7xv8")
 4:3/0 = 0
 5:3/0 = 0
 0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:4/0 = 0
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:4/0 = 0
+2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:4/0 = 0
 4:4/0 = 0
 5:4/0 = 0
 0:5/0 = 0
+0:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:5/0 = 0
 2:5/0 = 0
+2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:5/0 = 0
 4:5/0 = 0
 5:5/0 = 0
 0:6/0 = 0
+0:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:6/0 = 0
+1:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:6/0 = 0
+2:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:6/0 = 0
 4:6/0 = 0
 5:6/0 = 0
@@ -111,6 +119,7 @@ texture = ExtResource("3_v7xv8")
 5:16/0 = 0
 0:17/0 = 0
 1:17/0 = 0
+1:17/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:17/0 = 0
 3:17/0 = 0
 4:17/0 = 0
@@ -125,20 +134,28 @@ texture = ExtResource("3_v7xv8")
 1:19/0 = 0
 2:19/0 = 0
 3:19/0 = 0
+3:19/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:19/0 = 0
+4:19/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:19/0 = 0
+5:19/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:20/0 = 0
 1:20/0 = 0
 2:20/0 = 0
 3:20/0 = 0
+3:20/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:20/0 = 0
 5:20/0 = 0
+5:20/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:21/0 = 0
 1:21/0 = 0
 2:21/0 = 0
 3:21/0 = 0
+3:21/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:21/0 = 0
+4:21/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:21/0 = 0
+5:21/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:22/0 = 0
 1:22/0 = 0
 
@@ -157,7 +174,12 @@ script = ExtResource("1_jvsv4")
 
 [node name="Maze" type="Node2D" parent="."]
 
-[node name="TileLayer" type="TileMapLayer" parent="Maze"]
+[node name="FloorLayer" type="TileMapLayer" parent="Maze"]
+position = Vector2(448, 60)
+scale = Vector2(2, 2)
+tile_set = SubResource("TileSet_qftkq")
+
+[node name="WallLayer" type="TileMapLayer" parent="Maze"]
 position = Vector2(448, 60)
 scale = Vector2(2, 2)
 tile_set = SubResource("TileSet_qftkq")
