@@ -6,7 +6,6 @@ extends Control
 @onready var floor_layer: TileMapLayer = $Maze/FloorLayer
 @onready var wall_layer: TileMapLayer = $Maze/WallLayer
 @onready var food_layer: TileMapLayer = $Maze/FoodLayer
-@onready var characters_node: Node2D = $Maze/Characters
 @onready var ghost_blinky: CharacterBody2D = $Maze/GhostBlinky
 @onready var ghost_clyde: CharacterBody2D = $Maze/GhostClyde
 @onready var ghost_inky: CharacterBody2D = $Maze/GhostInky
@@ -50,6 +49,7 @@ func _input(event: InputEvent) -> void:
 func _create_maze():
 	var generator = MazeGenerator.new("ldy")
 	var maze = generator.generate_maze_tiles()
+	GameData.maze = maze
 	for x in MazeGenerator.MAZE_TILE_WIDTH:
 		for y in MazeGenerator.MAZE_TILE_HEIGHT:
 			var tile = MazeGenerator.get_maze_tile(maze, x, y)
@@ -59,7 +59,7 @@ func _create_maze():
 			elif MazeGenerator.Maze_tile.PACMAN_SPAWN == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 			elif MazeGenerator.Maze_tile.WALL == tile:
-				#floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
+				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 				wall_layer.set_cell(Vector2i(x, y), 0, WALL_TILE_INDEX)
 			elif MazeGenerator.Maze_tile.GHOST_SPAWN_BODER == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_FLOOR_TILE_INDEX)

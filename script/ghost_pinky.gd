@@ -6,5 +6,8 @@ func _ready() -> void:
 	position = spawn_pos
 
 func _physics_process(delta: float) -> void:
-	move_ghost(Vector2(16, 16))
+	if pacman_node:
+		var target_coor = world_to_grid(pacman_node.position) + pacman_node.direction * 2.0
+
+		move_ghost(target_coor)
 	move_and_slide()

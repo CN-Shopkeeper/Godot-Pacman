@@ -12,3 +12,5 @@ extends Node
 @export var inky_spawn_coor: Vector2i = Vector2i(15, 13)
 @export var pinky_spawn_coor: Vector2i = Vector2i(16, 13)
 @export var maze_size: Vector2i = Vector2i(32, 30)
+@export var top_right_corner_coor: Vector2i = Vector2i(30, 1)
+@export var bottom_left_corner_coor: Vector2i = Vector2i(1, 28)

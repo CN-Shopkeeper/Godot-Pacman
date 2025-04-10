@@ -6,5 +6,10 @@ func _ready() -> void:
 	position = spawn_pos
 
 func _physics_process(delta: float) -> void:
-	move_ghost(Vector2(16, 16))
+	if pacman_node:
+		var blinky_target_coor = world_to_grid(pacman_node.position)
+		var paths = pathfinding_grid.get_point_path(world_to_grid(position), blinky_target_coor)
+		var target_coor = blinky_target_coor if paths.size() > 8 else GlobalVariables.bottom_left_corner_coor
+
+		move_ghost(target_coor)
 	move_and_slide()

@@ -213,6 +213,37 @@ static func get_maze_tile(maze_tiles, x, y):
 		return
 	return maze_tiles[x + y * MAZE_TILE_WIDTH]
 
+static func get_nearest_access_coor(maze_tiles, target_x, target_y):
+	if target_x < 0:
+		target_x = 0
+	if target_x >= MAZE_TILE_WIDTH:
+		target_x = MAZE_TILE_WIDTH -1
+	if target_y < 0:
+		target_y = 0
+	if target_y >= MAZE_TILE_HEIGHT:
+		target_y = MAZE_TILE_HEIGHT -1
+
+	var result_coor = Vector2i.ZERO
+
+	var directions = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
+	var coor_set: Dictionary = {}
+	var coor_queue: Array = []
+	var find = false
+	coor_queue.append(Vector2i(target_x, target_y))
+	while !coor_queue.is_empty() and not find:
+		var now_coor = coor_queue.pop_front()
+		coor_set[now_coor] = true
+		for dir in directions:
+			if not coor_set.has(now_coor + dir) and maze_in_bounds(now_coor.x + dir.x, now_coor.y + dir.y):
+				coor_queue.append(now_coor + dir)
+		if get_maze_tile(maze_tiles, now_coor.x, now_coor.y) == Maze_tile.PATH:
+			find = true
+			result_coor = now_coor
+	return result_coor
+
+static func maze_in_bounds(x, y):
+	return 0 <= x and x < MAZE_TILE_WIDTH and 0 <= y and y < MAZE_TILE_HEIGHT
+
 func _shuffle_array(array: Array) -> Array:
 	for i in range(array.size() - 1, 0, -1):
 		var j = rng.randi_range(0, i)

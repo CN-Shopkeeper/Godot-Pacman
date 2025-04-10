@@ -1,7 +1,7 @@
 extends BaseCharacter
 
 
-const SPEED = 200.0
+const SPEED = 256
 
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var at_state_machine = animation_tree["parameters/playback"]

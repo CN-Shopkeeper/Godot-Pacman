@@ -222,25 +222,30 @@ default_color = Color(1, 0.623529, 1, 1)
 
 [node name="Pacman" parent="Maze" instance=ExtResource("4_v7xv8")]
 
-[node name="GhostBlinky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("5_yvddi")]
+[node name="GhostBlinky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d", "pacman_node") instance=ExtResource("5_yvddi")]
 floor_layer = NodePath("../FloorLayer")
 wall_layer = NodePath("../WallLayer")
 visual_path_line2d = NodePath("../BlinkyPathLine2D")
+pacman_node = NodePath("../Pacman")
 
-[node name="GhostClyde" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("6_qftkq")]
+[node name="GhostClyde" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d", "pacman_node") instance=ExtResource("6_qftkq")]
 floor_layer = NodePath("../FloorLayer")
 wall_layer = NodePath("../WallLayer")
 visual_path_line2d = NodePath("../ClydePathLine2D")
+pacman_node = NodePath("../Pacman")
 
-[node name="GhostInky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("7_58jo6")]
+[node name="GhostInky" parent="Maze" node_paths=PackedStringArray("blinky_node", "floor_layer", "wall_layer", "visual_path_line2d", "pacman_node") instance=ExtResource("7_58jo6")]
+blinky_node = NodePath("../GhostBlinky")
 floor_layer = NodePath("../FloorLayer")
 wall_layer = NodePath("../WallLayer")
 visual_path_line2d = NodePath("../InkyPathLine2D")
+pacman_node = NodePath("../Pacman")
 
-[node name="GhostPinky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("8_hk83x")]
+[node name="GhostPinky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d", "pacman_node") instance=ExtResource("8_hk83x")]
 floor_layer = NodePath("../FloorLayer")
 wall_layer = NodePath("../WallLayer")
 visual_path_line2d = NodePath("../PinkyPathLine2D")
+pacman_node = NodePath("../Pacman")
 
 [node name="BackToMainMenu" type="CenterContainer" parent="."]
 visible = false
