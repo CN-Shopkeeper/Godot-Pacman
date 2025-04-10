@@ -1,7 +1,7 @@
 class_name MazeGenerator
 extends Resource
 
-enum Maze_tile {WALL, PATH, GHOST_SPAWN, GHOST_SPAWN_BODER}
+enum Maze_tile {WALL, PATH, PACMAN_SPAWN, GHOST_SPAWN, GHOST_SPAWN_BODER}
 
 const half_cell_height = 9
 const half_cell_width = 5
@@ -71,6 +71,10 @@ func generate_maze_tiles():
 			_set_maze_tile(maze_tiles, x, y, Maze_tile.GHOST_SPAWN)
 	for x in range(14, 18):
 		_set_maze_tile(maze_tiles, x, 11, Maze_tile.GHOST_SPAWN)
+
+	# Pacman出生区
+	_set_maze_tile(maze_tiles, GlobalVariables.pacman_spawn_coor.x, GlobalVariables.pacman_spawn_coor.y, Maze_tile.PACMAN_SPAWN)
+	_set_maze_tile(maze_tiles, GlobalVariables.pacman_spawn_coor.x + 1, GlobalVariables.pacman_spawn_coor.y, Maze_tile.PACMAN_SPAWN)
 	return maze_tiles
 
 func _generate_maze_paths():

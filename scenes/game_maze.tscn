@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cu4klmtr45gw0"]
+[gd_scene load_steps=12 format=3 uid="uid://cu4klmtr45gw0"]
 
 [ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://script/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
+[ext_resource type="PackedScene" uid="uid://b28gtepbxlljo" path="res://scenes/dot.tscn" id="3_py8pd"]
 [ext_resource type="Texture2D" uid="uid://cxpedg0by0dbv" path="res://assets/Dungeon_WallsAndFloors.png" id="3_v7xv8"]
+[ext_resource type="PackedScene" uid="uid://b580vvpwu6u84" path="res://scenes/pacman.tscn" id="4_v7xv8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvddi"]
 texture = ExtResource("3_v7xv8")
@@ -25,6 +27,7 @@ texture = ExtResource("3_v7xv8")
 4:2/0 = 0
 5:2/0 = 0
 0:3/0 = 0
+0:3/0/physics_layer_1/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:3/0 = 0
 2:3/0 = 0
 3:3/0 = 0
@@ -42,6 +45,7 @@ texture = ExtResource("3_v7xv8")
 0:5/0 = 0
 0:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:5/0 = 0
+1:5/0/physics_layer_1/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:5/0 = 0
 2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:5/0 = 0
@@ -161,7 +165,20 @@ texture = ExtResource("3_v7xv8")
 
 [sub_resource type="TileSet" id="TileSet_qftkq"]
 physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 8
 sources/0 = SubResource("TileSetAtlasSource_yvddi")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_v7xv8"]
+scenes/1/scene = ExtResource("3_py8pd")
+
+[sub_resource type="TileSet" id="TileSet_yvddi"]
+sources/0 = SubResource("TileSetScenesCollectionSource_v7xv8")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_yvddi"]
+scenes/1/scene = ExtResource("4_v7xv8")
+
+[sub_resource type="TileSet" id="TileSet_1ajje"]
+sources/0 = SubResource("TileSetScenesCollectionSource_yvddi")
 
 [node name="GameMaze" type="Control"]
 layout_mode = 3
@@ -173,16 +190,20 @@ grow_vertical = 2
 script = ExtResource("1_jvsv4")
 
 [node name="Maze" type="Node2D" parent="."]
-
-[node name="FloorLayer" type="TileMapLayer" parent="Maze"]
 position = Vector2(448, 60)
 scale = Vector2(2, 2)
+
+[node name="FloorLayer" type="TileMapLayer" parent="Maze"]
 tile_set = SubResource("TileSet_qftkq")
 
 [node name="WallLayer" type="TileMapLayer" parent="Maze"]
-position = Vector2(448, 60)
-scale = Vector2(2, 2)
 tile_set = SubResource("TileSet_qftkq")
+
+[node name="FoodLayer" type="TileMapLayer" parent="Maze"]
+tile_set = SubResource("TileSet_yvddi")
+
+[node name="CharacterLayer" type="TileMapLayer" parent="Maze"]
+tile_set = SubResource("TileSet_1ajje")
 
 [node name="BackToMainMenu" type="CenterContainer" parent="."]
 visible = false

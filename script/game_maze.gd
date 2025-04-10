@@ -5,6 +5,8 @@ extends Control
 @onready var back_to_main_menu_yes_button: AnimatedButton = $BackToMainMenu/VBoxContainer/HBoxContainer/Yes
 @onready var floor_layer: TileMapLayer = $Maze/FloorLayer
 @onready var wall_layer: TileMapLayer = $Maze/WallLayer
+@onready var food_layer: TileMapLayer = $Maze/FoodLayer
+@onready var character_layer: TileMapLayer = $Maze/CharacterLayer
 
 @onready var background: ColorRect = $Background
 
@@ -41,6 +43,9 @@ func _create_maze():
 		for y in MazeGenerator.MAZE_TILE_HEIGHT:
 			var tile = MazeGenerator.get_maze_tile(maze, x, y)
 			if MazeGenerator.Maze_tile.PATH == tile:
+				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
+				food_layer.set_cell(Vector2i(x, y), 0, Vector2i.ZERO, 1)
+			elif MazeGenerator.Maze_tile.PACMAN_SPAWN == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 			elif MazeGenerator.Maze_tile.WALL == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
@@ -79,6 +84,8 @@ func _create_maze():
 
 			elif MazeGenerator.Maze_tile.GHOST_SPAWN == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_FLOOR_TILE_INDEX)
+
+	character_layer.set_cell(GlobalVariables.pacman_spawn_coor, 0, Vector2i.ZERO, 1)
 
 func _on_no_button_pressed() -> void:
 	back_to_main_menu.hide()
