@@ -1,10 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://cu4klmtr45gw0"]
+[gd_scene load_steps=14 format=3 uid="uid://cu4klmtr45gw0"]
 
 [ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://script/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
 [ext_resource type="PackedScene" uid="uid://b28gtepbxlljo" path="res://scenes/dot.tscn" id="3_py8pd"]
 [ext_resource type="Texture2D" uid="uid://cxpedg0by0dbv" path="res://assets/Dungeon_WallsAndFloors.png" id="3_v7xv8"]
 [ext_resource type="PackedScene" uid="uid://b580vvpwu6u84" path="res://scenes/pacman.tscn" id="4_v7xv8"]
+[ext_resource type="PackedScene" uid="uid://tdykqjvh1jcn" path="res://scenes/ghost_blinky.tscn" id="5_yvddi"]
+[ext_resource type="PackedScene" uid="uid://dnqw26ychp7ng" path="res://scenes/ghost_clyde.tscn" id="6_qftkq"]
+[ext_resource type="PackedScene" uid="uid://d170r6fdl4451" path="res://scenes/ghost_inky.tscn" id="7_58jo6"]
+[ext_resource type="PackedScene" uid="uid://c8x26hub858s0" path="res://scenes/ghost_pinky.tscn" id="8_hk83x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvddi"]
 texture = ExtResource("3_v7xv8")
@@ -174,12 +178,6 @@ scenes/1/scene = ExtResource("3_py8pd")
 [sub_resource type="TileSet" id="TileSet_yvddi"]
 sources/0 = SubResource("TileSetScenesCollectionSource_v7xv8")
 
-[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_yvddi"]
-scenes/1/scene = ExtResource("4_v7xv8")
-
-[sub_resource type="TileSet" id="TileSet_1ajje"]
-sources/0 = SubResource("TileSetScenesCollectionSource_yvddi")
-
 [node name="GameMaze" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -202,8 +200,47 @@ tile_set = SubResource("TileSet_qftkq")
 [node name="FoodLayer" type="TileMapLayer" parent="Maze"]
 tile_set = SubResource("TileSet_yvddi")
 
-[node name="CharacterLayer" type="TileMapLayer" parent="Maze"]
-tile_set = SubResource("TileSet_1ajje")
+[node name="BlinkyPathLine2D" type="Line2D" parent="Maze"]
+position = Vector2(8, 8)
+width = 1.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="ClydePathLine2D" type="Line2D" parent="Maze"]
+position = Vector2(8, 8)
+width = 1.0
+default_color = Color(1, 0.623529, 0, 1)
+
+[node name="InkyPathLine2D" type="Line2D" parent="Maze"]
+position = Vector2(8, 8)
+width = 1.0
+default_color = Color(0.183043, 0.796319, 0.953343, 1)
+
+[node name="PinkyPathLine2D" type="Line2D" parent="Maze"]
+position = Vector2(8, 8)
+width = 1.0
+default_color = Color(1, 0.623529, 1, 1)
+
+[node name="Pacman" parent="Maze" instance=ExtResource("4_v7xv8")]
+
+[node name="GhostBlinky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("5_yvddi")]
+floor_layer = NodePath("../FloorLayer")
+wall_layer = NodePath("../WallLayer")
+visual_path_line2d = NodePath("../BlinkyPathLine2D")
+
+[node name="GhostClyde" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("6_qftkq")]
+floor_layer = NodePath("../FloorLayer")
+wall_layer = NodePath("../WallLayer")
+visual_path_line2d = NodePath("../ClydePathLine2D")
+
+[node name="GhostInky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("7_58jo6")]
+floor_layer = NodePath("../FloorLayer")
+wall_layer = NodePath("../WallLayer")
+visual_path_line2d = NodePath("../InkyPathLine2D")
+
+[node name="GhostPinky" parent="Maze" node_paths=PackedStringArray("floor_layer", "wall_layer", "visual_path_line2d") instance=ExtResource("8_hk83x")]
+floor_layer = NodePath("../FloorLayer")
+wall_layer = NodePath("../WallLayer")
+visual_path_line2d = NodePath("../PinkyPathLine2D")
 
 [node name="BackToMainMenu" type="CenterContainer" parent="."]
 visible = false

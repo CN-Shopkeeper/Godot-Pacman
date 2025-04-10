@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://tdykqjvh1jcn"]
+
+[ext_resource type="Script" uid="uid://d1vqxjt6voiqc" path="res://script/ghost_blinky.gd" id="1_4rftu"]
+[ext_resource type="Texture2D" uid="uid://bf0pr3p50ws4l" path="res://assets/sprites/ghosts/blinky.png" id="1_sqryi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_monyk"]
+radius = 7.9
+
+[node name="GhostBlinky" type="CharacterBody2D"]
+collision_layer = 4
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_4rftu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_sqryi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_monyk")

@@ -92,6 +92,7 @@ move_down={
 2d_physics/layer_2="pacman"
 2d_physics/layer_3="ghost"
 2d_physics/layer_4="ghost_gate"
+2d_physics/canvas_textures/default_texture_filter=0
 
 [rendering]
 

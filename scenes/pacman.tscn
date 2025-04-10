@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=3 uid="uid://b580vvpwu6u84"]
 
-[ext_resource type="Script" uid="uid://dw0ki53q7hh4x" path="res://scenes/pacman.gd" id="1_cc2ie"]
+[ext_resource type="Script" uid="uid://dw0ki53q7hh4x" path="res://script/pacman.gd" id="1_cc2ie"]
 [ext_resource type="Texture2D" uid="uid://c8h5yoikffbjq" path="res://assets/sprites/pacman-down/1.png" id="1_jno2f"]
 [ext_resource type="Texture2D" uid="uid://c1d870tenwgqw" path="res://assets/sprites/pacman-down/2.png" id="2_cc2ie"]
 [ext_resource type="Texture2D" uid="uid://bttodyn57pwlf" path="res://assets/sprites/pacman-down/3.png" id="3_n0x1e"]
@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ckv3fgsp3wonv" path="res://assets/sprites/pacman-up/3.png" id="12_1gynd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jno2f"]
-radius = 6.0
+radius = 7.5
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_tjtka"]
 animations = [{
@@ -253,6 +253,8 @@ transitions = ["Start", "move", SubResource("AnimationNodeStateMachineTransition
 [node name="Pacman" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 9
+motion_mode = 1
+wall_min_slide_angle = 0.0
 script = ExtResource("1_cc2ie")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -260,7 +262,8 @@ shape = SubResource("CircleShape2D_jno2f")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tjtka")
-animation = &"up"
+animation = &"left"
+frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
