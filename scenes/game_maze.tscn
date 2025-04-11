@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cu4klmtr45gw0"]
+[gd_scene load_steps=16 format=3 uid="uid://cu4klmtr45gw0"]
 
 [ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://scripts/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://dnqw26ychp7ng" path="res://scenes/ghost_clyde.tscn" id="6_qftkq"]
 [ext_resource type="PackedScene" uid="uid://d170r6fdl4451" path="res://scenes/ghost_inky.tscn" id="7_58jo6"]
 [ext_resource type="PackedScene" uid="uid://c8x26hub858s0" path="res://scenes/ghost_pinky.tscn" id="8_hk83x"]
+[ext_resource type="AudioStream" uid="uid://53iopq4fyi1d" path="res://assets/sound_effects/game_start_count_down.mp3" id="10_hk83x"]
+[ext_resource type="AudioStream" uid="uid://bt50do7jegk0e" path="res://assets/sound_effects/bgm_normal.wav" id="11_vf8bg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvddi"]
 texture = ExtResource("3_v7xv8")
@@ -179,6 +181,7 @@ scenes/1/scene = ExtResource("3_py8pd")
 sources/0 = SubResource("TileSetScenesCollectionSource_v7xv8")
 
 [node name="GameMaze" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,6 +191,7 @@ grow_vertical = 2
 script = ExtResource("1_jvsv4")
 
 [node name="Maze" type="Node2D" parent="."]
+process_mode = 1
 position = Vector2(448, 60)
 scale = Vector2(2, 2)
 
@@ -248,6 +252,7 @@ visual_path_line2d = NodePath("../PinkyPathLine2D")
 pacman_node = NodePath("../Pacman")
 
 [node name="BackToMainMenu" type="CenterContainer" parent="."]
+process_mode = 2
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -309,6 +314,17 @@ layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
+
+[node name="GameStartAP" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_hk83x")
+bus = &"Music"
+
+[node name="BackgroundMusicAP" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_vf8bg")
+bus = &"Music"
+
+[node name="SFXAP" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_button_pressed"]
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/No" to="." method="_on_no_button_pressed"]

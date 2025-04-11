@@ -1,4 +1,5 @@
 extends Control
+@onready var maze: Node2D = $Maze
 @onready var back_to_main_menucolor_rect: ColorRect = $BackToMainMenu/ColorRect
 @onready var back_to_main_menu: CenterContainer = $BackToMainMenu
 @onready var back_to_main_menu_no_button: AnimatedButton = $BackToMainMenu/VBoxContainer/HBoxContainer/No
@@ -10,12 +11,16 @@ extends Control
 @onready var ghost_clyde: CharacterBody2D = $Maze/GhostClyde
 @onready var ghost_inky: CharacterBody2D = $Maze/GhostInky
 @onready var ghost_pinky: CharacterBody2D = $Maze/GhostPinky
+@onready var game_start_ap: AudioStreamPlayer = $GameStartAP
+@onready var background_music_ap: AudioStreamPlayer = $BackgroundMusicAP
+@onready var sfxap: AudioStreamPlayer = $SFXAP
 
 @onready var background: ColorRect = $Background
 
 const MAIN_MENU_PATH = "res://scenes/main_menu.tscn"
 const PACMAN = preload("res://scenes/pacman.tscn")
 const GHOST_BLINKY = preload("res://scenes/ghost_blinky.tscn")
+const DOT_EATEN = preload("res://assets/sound_effects/dot_eaten.wav")
 #const FLOOR_TILE_INDEX = Vector2i(4,20)
 const PATH_FLOOR_TILE_INDEX = Vector2i(1, 2)
 const WALL_TILE_INDEX = Vector2i(1, 14)
@@ -29,6 +34,8 @@ const GHOST_SPAWN_BODER_BOTTOM_LEFT_TILE_INDEX = Vector2i(0, 6)
 const GHOST_SPAWN_BODER_BOTTOM_RIGHT_TILE_INDEX = Vector2i(2, 6)
 const GHOST_SPAWN_FLOOR_TILE_INDEX = Vector2i(0, 3)
 
+var game_started = false
+
 func _ready() -> void:
 	background.color = Color.BLACK
 	back_to_main_menucolor_rect.color = GlobalVariables.main_menu_color
@@ -39,9 +46,21 @@ func _ready() -> void:
 	ghost_inky.update_pathfinding_grid()
 	ghost_pinky.update_pathfinding_grid()
 
+	# 游戏开始音效
+	get_tree().paused = true
+	game_start_ap.play()
+	await game_start_ap.finished
+	get_tree().paused = false
+	game_started = true
+	background_music_ap.play()
+	SignalBus.connect("dot_eaten", _play_dot_eaten)
+
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_pause"):
+		if not game_started:
+			return
+		get_tree().paused = !get_tree().paused
 		back_to_main_menu.visible = !back_to_main_menu.visible
 		if back_to_main_menu.visible:
 			back_to_main_menu_no_button.grab_focus()
@@ -96,12 +115,16 @@ func _create_maze():
 			elif MazeGenerator.Maze_tile.GHOST_SPAWN == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_FLOOR_TILE_INDEX)
 
-
+func _play_dot_eaten(dot):
+	sfxap.stream = DOT_EATEN
+	sfxap.play()
 
 func _on_no_button_pressed() -> void:
 	back_to_main_menu.hide()
+	get_tree().paused = false
 
 func _on_yes_button_pressed() -> void:
+	get_tree().paused = false
 	IndieBlueprintSceneTransitioner.transition_to(
 		MAIN_MENU_PATH,
 		IndieBlueprintPremadeTransitions.Dissolve,

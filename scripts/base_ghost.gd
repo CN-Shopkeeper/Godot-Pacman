@@ -32,7 +32,7 @@ func update_velocity(target_coor: Vector2i):
 	if Vector2i.ZERO == target_coor or not is_at_intersection():
 		return
 	target_coor = MazeGenerator.get_nearest_ghost_access_coor(GameData.maze, target_coor.x, target_coor.y)
-	print(target_coor)
+
 	path_to_target = pathfinding_grid.get_point_path(world_to_grid(position), target_coor)
 	#print(target_position," size ",path_to_target.size())
 	if path_to_target.size() > 1:

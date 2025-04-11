@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d170r6fdl4451"]
+[gd_scene load_steps=10 format=3 uid="uid://d170r6fdl4451"]
 
 [ext_resource type="Script" uid="uid://bm8nsbqh3r35" path="res://scripts/ghost_inky.gd" id="1_c2xj4"]
 [ext_resource type="Texture2D" uid="uid://bhit5f6iu5rsq" path="res://assets/sprites/ghosts/inky.png" id="2_c2xj4"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cx8ea8e7sc56w" path="res://scripts/ghost_state_machine/chase_state.gd" id="5_58p5e"]
 [ext_resource type="Script" uid="uid://bcymvjt3tyur6" path="res://scripts/ghost_state_machine/scatter_state.gd" id="6_81qyj"]
 [ext_resource type="Script" uid="uid://cdgjvag5j3vaw" path="res://scripts/ghost_state_machine/frightened_state.gd" id="7_58p5e"]
+[ext_resource type="Script" uid="uid://hyxryvp7nw62" path="res://scripts/ghost_state_machine/eaten_state.gd" id="8_y186o"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_monyk"]
 radius = 7.9
@@ -47,4 +48,8 @@ ghost_node = NodePath("../..")
 
 [node name="Frightened" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
 script = ExtResource("7_58p5e")
+ghost_node = NodePath("../..")
+
+[node name="Eaten" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
+script = ExtResource("8_y186o")
 ghost_node = NodePath("../..")

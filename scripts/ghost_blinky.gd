@@ -11,7 +11,7 @@ func _ready() -> void:
 	spawn_pos = grid_to_world(GlobalVariables.blinky_spawn_coor)
 	position = spawn_pos
 
-	fsm.switch_to(States.Frightened)
+	fsm.switch_to(States.Chase)
 
 
 func _physics_process(delta: float) -> void:
