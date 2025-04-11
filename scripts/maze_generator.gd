@@ -1,8 +1,8 @@
 class_name MazeGenerator
 extends Resource
 
-enum Maze_tile {WALL, PATH, PACMAN_SPAWN, GHOST_SPAWN, GHOST_SPAWN_BODER}
-const GHOST_ACCESS_TILE = [Maze_tile.PATH, Maze_tile.PACMAN_SPAWN, Maze_tile.GHOST_SPAWN]
+enum Maze_tile {WALL, DOT,POWER_DOT, PACMAN_SPAWN, GHOST_SPAWN, GHOST_SPAWN_BODER}
+const GHOST_ACCESS_TILE = [Maze_tile.DOT,Maze_tile.POWER_DOT, Maze_tile.PACMAN_SPAWN, Maze_tile.GHOST_SPAWN]
 const half_cell_height = 9
 const half_cell_width = 5
 # 27
@@ -39,14 +39,18 @@ func generate_maze_tiles():
 		_set_maze_tile(maze_tiles, 0, y, Maze_tile.WALL)
 		_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -1, y, Maze_tile.WALL)
 
-	# 第二圈的路
+	# 第二圈的dot
 	for x in range(1, MAZE_TILE_WIDTH -1):
-		_set_maze_tile(maze_tiles, x, 1, Maze_tile.PATH)
-		_set_maze_tile(maze_tiles, x, MAZE_TILE_HEIGHT -2, Maze_tile.PATH)
+		_set_maze_tile(maze_tiles, x, 1, Maze_tile.DOT)
+		_set_maze_tile(maze_tiles, x, MAZE_TILE_HEIGHT -2, Maze_tile.DOT)
 	for y in range(1, MAZE_TILE_HEIGHT -1):
-		_set_maze_tile(maze_tiles, 1, y, Maze_tile.PATH)
-		_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -2, y, Maze_tile.PATH)
-
+		_set_maze_tile(maze_tiles, 1, y, Maze_tile.DOT)
+		_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -2, y, Maze_tile.DOT)
+	_set_maze_tile(maze_tiles, 1, 1, Maze_tile.POWER_DOT)
+	_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -2, 1, Maze_tile.POWER_DOT)
+	_set_maze_tile(maze_tiles, 1, MAZE_TILE_HEIGHT -2, Maze_tile.POWER_DOT)
+	_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -2, MAZE_TILE_HEIGHT -2, Maze_tile.POWER_DOT)
+	
 	# 复制half_paths的数据
 	for x in range(half_path_width -1):
 		for y in range(1, half_path_height):
@@ -99,7 +103,7 @@ func _generate_maze_paths():
 				or _get_half_maze_path(half_maze_paths_reference, x, y) != _get_half_maze_path(half_maze_paths_reference, x + 1, y)
 				or _get_half_maze_path(half_maze_paths_reference, x, y) != _get_half_maze_path(half_maze_paths_reference, x + 1, y -1)
 			):
-				_set_half_maze_path(half_maze_paths, x, y, Maze_tile.PATH)
+				_set_half_maze_path(half_maze_paths, x, y, Maze_tile.DOT)
 
 	return half_maze_paths
 
@@ -158,12 +162,14 @@ func _generate_tetris_cells_bfs(half_maze_cells: Array, start_x: int, start_y: i
 		if y + 1 < half_cell_height and 0 == _get_half_maze_cell(half_maze_cells, x, y + 1):
 			cell_neighbors.append(Vector2i(x, y + 1))
 
-		_shuffle_array(cell_neighbors)
+		#_shuffle_array(cell_neighbors)
 
 		for neighbor in cell_neighbors:
 			candidate_queue.push_back(neighbor)
+		
+		_shuffle_array(candidate_queue)
 
-# 获取待生成的tetris的cell数量（1~5）
+# 获取待生成的tetris的cell数量（2~5）
 func _select_tetris_cell_count() -> int:
 	var rand = rng.randi_range(0, 100)
 	if rand < 5:

@@ -7,10 +7,16 @@ extends BaseCharacter
 @export var visual_path_line2d: Line2D = null
 @export var pacman_node: CharacterBody2D = null
 
+@onready var fsm: StateMachine = $FSM
+
+enum States {Idle, Chase, Scatter, Frightened, Eaten}
+
 const CHASE_BASE_SPEED = 240
 const FRIGHTENED_SPEED = 160
 const EATEN_SPEED = 384
 
+var is_waiting=true
+var now_state:States
 var now_dir: Vector2i
 
 var pathfinding_grid: AStarGrid2D = AStarGrid2D.new()
@@ -18,6 +24,12 @@ var spawn_coor: Vector2i
 var spawn_pos: Vector2
 
 var path_to_target: Array = []
+
+func change_state(new_state:States):
+	if is_waiting:
+		return
+	fsm.switch_to(new_state)
+	now_state = new_state
 
 func update_pathfinding_grid():
 	pathfinding_grid.region = floor_layer.get_used_rect()

@@ -1,17 +1,15 @@
+class_name GhostBlinky
 extends BaseGhost
-
-@onready var fsm: StateMachine = $FSM
-
-enum States {Idle, Chase, Scatter, Frightened, Eaten}
 
 # todo angry mode
 func _ready() -> void:
+	is_waiting=false
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
 	spawn_coor = GlobalVariables.blinky_spawn_coor
 	spawn_pos = grid_to_world(GlobalVariables.blinky_spawn_coor)
 	position = spawn_pos
-
-	fsm.switch_to(States.Chase)
+	
+	change_state(States.Chase)
 
 
 func _physics_process(delta: float) -> void:
@@ -28,8 +26,8 @@ func get_scatter_coor() -> Vector2i:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	var current_state_name = fsm.current_state.name
 	if current_state_name == "Frightened":
-		print("eaten")
-		fsm.switch_to(States.Eaten)
+		#print("eaten")
+		change_state(States.Eaten)
 	elif -1 != ["Chase", "Scatter"].find(current_state_name):
-		print("catch")
-	pass  # Replace with function body.
+		#print("catch")
+		pass  # Replace with function body.

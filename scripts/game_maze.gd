@@ -7,13 +7,14 @@ extends Control
 @onready var floor_layer: TileMapLayer = $Maze/FloorLayer
 @onready var wall_layer: TileMapLayer = $Maze/WallLayer
 @onready var food_layer: TileMapLayer = $Maze/FoodLayer
-@onready var ghost_blinky: CharacterBody2D = $Maze/GhostBlinky
-@onready var ghost_clyde: CharacterBody2D = $Maze/GhostClyde
-@onready var ghost_inky: CharacterBody2D = $Maze/GhostInky
-@onready var ghost_pinky: CharacterBody2D = $Maze/GhostPinky
+@onready var ghost_blinky: GhostBlinky = $Maze/GhostBlinky
+@onready var ghost_clyde: GhostClyde = $Maze/GhostClyde
+@onready var ghost_inky: GhostInky = $Maze/GhostInky
+@onready var ghost_pinky: GhostPinky = $Maze/GhostPinky
 @onready var game_start_ap: AudioStreamPlayer = $GameStartAP
 @onready var background_music_ap: AudioStreamPlayer = $BackgroundMusicAP
 @onready var sfxap: AudioStreamPlayer = $SFXAP
+@onready var timer: Timer = $Timer
 
 @onready var background: ColorRect = $Background
 
@@ -21,6 +22,9 @@ const MAIN_MENU_PATH = "res://scenes/main_menu.tscn"
 const PACMAN = preload("res://scenes/pacman.tscn")
 const GHOST_BLINKY = preload("res://scenes/ghost_blinky.tscn")
 const DOT_EATEN = preload("res://assets/sound_effects/dot_eaten.wav")
+const POWER_DOT_EATEN = preload("res://assets/sound_effects/power_dot_eaten.wav")
+const BGM_SPECIAL = preload("res://assets/sound_effects/bgm_special.wav")
+const BGM_NORMAL = preload("res://assets/sound_effects/bgm_normal.wav")
 #const FLOOR_TILE_INDEX = Vector2i(4,20)
 const PATH_FLOOR_TILE_INDEX = Vector2i(1, 2)
 const WALL_TILE_INDEX = Vector2i(1, 14)
@@ -72,9 +76,12 @@ func _create_maze():
 	for x in MazeGenerator.MAZE_TILE_WIDTH:
 		for y in MazeGenerator.MAZE_TILE_HEIGHT:
 			var tile = MazeGenerator.get_maze_tile(maze, x, y)
-			if MazeGenerator.Maze_tile.PATH == tile:
+			if MazeGenerator.Maze_tile.DOT == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 				food_layer.set_cell(Vector2i(x, y), 0, Vector2i.ZERO, 1)
+			elif MazeGenerator.Maze_tile.POWER_DOT == tile:
+				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
+				food_layer.set_cell(Vector2i(x, y), 0, Vector2i.ZERO, 2)
 			elif MazeGenerator.Maze_tile.PACMAN_SPAWN == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 			elif MazeGenerator.Maze_tile.WALL == tile:
@@ -88,16 +95,16 @@ func _create_maze():
 				var top_tile = MazeGenerator.get_maze_tile(maze, x, y -1)
 				var bottom_tile = MazeGenerator.get_maze_tile(maze, x, y + 1)
 				# 上边界
-				if MazeGenerator.Maze_tile.PATH == top_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == bottom_tile:
+				if MazeGenerator.Maze_tile.DOT == top_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == bottom_tile:
 					wall_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_BODER_TOP_TILE_INDEX)
 				# 下边界
-				if MazeGenerator.Maze_tile.PATH == bottom_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == top_tile:
+				if MazeGenerator.Maze_tile.DOT == bottom_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == top_tile:
 					wall_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_BODER_BOTTOM_TILE_INDEX)
 				# 左边界
-				if MazeGenerator.Maze_tile.PATH == left_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == right_tile:
+				if MazeGenerator.Maze_tile.DOT == left_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == right_tile:
 					wall_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_BODER_LEFT_TILE_INDEX)
 				# 右边界
-				if MazeGenerator.Maze_tile.PATH == right_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == left_tile:
+				if MazeGenerator.Maze_tile.DOT == right_tile and MazeGenerator.Maze_tile.GHOST_SPAWN == left_tile:
 					wall_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_BODER_RIGHT_TILE_INDEX)
 				# 左上边界
 				if MazeGenerator.Maze_tile.GHOST_SPAWN_BODER == bottom_tile and MazeGenerator.Maze_tile.GHOST_SPAWN_BODER == right_tile:
@@ -116,8 +123,33 @@ func _create_maze():
 				floor_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_FLOOR_TILE_INDEX)
 
 func _play_dot_eaten(dot):
-	sfxap.stream = DOT_EATEN
-	sfxap.play()
+	if "power_dot" ==  dot:
+		sfxap.stream = POWER_DOT_EATEN
+		sfxap.play()
+		
+		background_music_ap.stream = BGM_SPECIAL
+		background_music_ap.play()
+		
+		
+		ghost_blinky.change_state(ghost_blinky.States.Frightened)
+		ghost_clyde.change_state(ghost_clyde.States.Frightened)
+		ghost_inky.change_state(ghost_inky.States.Frightened)
+		ghost_pinky.change_state(ghost_pinky.States.Frightened)
+		
+		timer.wait_time=10
+		timer.start()
+		await  timer.timeout
+		
+		background_music_ap.stream = BGM_NORMAL
+		background_music_ap.play()
+		
+		ghost_blinky.change_state(ghost_blinky.States.Chase)
+		ghost_clyde.change_state(ghost_clyde.States.Chase)
+		ghost_inky.change_state(ghost_inky.States.Chase)
+		ghost_pinky.change_state(ghost_pinky.States.Chase)
+	else:
+		sfxap.stream = DOT_EATEN	
+		sfxap.play()
 
 func _on_no_button_pressed() -> void:
 	back_to_main_menu.hide()

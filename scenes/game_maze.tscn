@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://cu4klmtr45gw0"]
+[gd_scene load_steps=17 format=3 uid="uid://cu4klmtr45gw0"]
 
 [ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://scripts/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
 [ext_resource type="PackedScene" uid="uid://b28gtepbxlljo" path="res://scenes/dot.tscn" id="3_py8pd"]
 [ext_resource type="Texture2D" uid="uid://cxpedg0by0dbv" path="res://assets/Dungeon_WallsAndFloors.png" id="3_v7xv8"]
+[ext_resource type="PackedScene" uid="uid://51t0k6ylg0qd" path="res://scenes/pwoer_dot.tscn" id="4_8wpmx"]
 [ext_resource type="PackedScene" uid="uid://b580vvpwu6u84" path="res://scenes/pacman.tscn" id="4_v7xv8"]
 [ext_resource type="PackedScene" uid="uid://tdykqjvh1jcn" path="res://scenes/ghost_blinky.tscn" id="5_yvddi"]
 [ext_resource type="PackedScene" uid="uid://dnqw26ychp7ng" path="res://scenes/ghost_clyde.tscn" id="6_qftkq"]
@@ -176,6 +177,7 @@ sources/0 = SubResource("TileSetAtlasSource_yvddi")
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_v7xv8"]
 scenes/1/scene = ExtResource("3_py8pd")
+scenes/2/scene = ExtResource("4_8wpmx")
 
 [sub_resource type="TileSet" id="TileSet_yvddi"]
 sources/0 = SubResource("TileSetScenesCollectionSource_v7xv8")
@@ -325,6 +327,8 @@ bus = &"Music"
 
 [node name="SFXAP" type="AudioStreamPlayer" parent="."]
 bus = &"SFX"
+
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_button_pressed"]
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/No" to="." method="_on_no_button_pressed"]

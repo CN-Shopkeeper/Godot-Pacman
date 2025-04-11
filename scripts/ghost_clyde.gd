@@ -1,15 +1,11 @@
+class_name GhostClyde
 extends BaseGhost
 
-@onready var fsm: StateMachine = $FSM
-
-enum States {Idle, Chase, Scatter, Frightened, Eaten}
 
 func _ready() -> void:
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
 	spawn_pos = grid_to_world(GlobalVariables.clyde_spawn_coor)
 	position = spawn_pos
-
-	fsm.switch_to(States.Idle)
 
 func _physics_process(delta: float) -> void:
 	fsm.physics_update(delta)

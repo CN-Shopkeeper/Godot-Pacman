@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://51t0k6ylg0qd"]
+
+[ext_resource type="Script" uid="uid://c52hvhuga5fg2" path="res://scripts/power_dot.gd" id="1_p5gav"]
+[ext_resource type="Texture2D" uid="uid://b431bngo1js0f" path="res://assets/sprites/other/dot.png" id="2_1j5wg"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_acjrx"]
+radius = 4.0
+
+[node name="PowerDot" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_p5gav")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(4, 4)
+texture = ExtResource("2_1j5wg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_acjrx")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
