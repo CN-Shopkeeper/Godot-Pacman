@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://dnqw26ychp7ng"]
+[gd_scene load_steps=8 format=3 uid="uid://dnqw26ychp7ng"]
 
-[ext_resource type="Script" uid="uid://yeqcurdo30i7" path="res://script/ghost_clyde.gd" id="1_8iek7"]
+[ext_resource type="Script" uid="uid://yeqcurdo30i7" path="res://scripts/ghost_clyde.gd" id="1_8iek7"]
 [ext_resource type="Texture2D" uid="uid://bpxqwjf0vcrf2" path="res://assets/sprites/ghosts/clyde.png" id="2_8iek7"]
+[ext_resource type="Script" uid="uid://b8fnlaas2b5lg" path="res://scripts/ghost_state_machine/state_machine.gd" id="3_c82bi"]
+[ext_resource type="Script" uid="uid://b81u4bkwlp31s" path="res://scripts/ghost_state_machine/idle_state.gd" id="4_jwder"]
+[ext_resource type="Script" uid="uid://cx8ea8e7sc56w" path="res://scripts/ghost_state_machine/chase_state.gd" id="5_m40xj"]
+[ext_resource type="Script" uid="uid://bcymvjt3tyur6" path="res://scripts/ghost_state_machine/scatter_state.gd" id="6_jwder"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_monyk"]
 radius = 7.9
@@ -17,3 +21,18 @@ texture = ExtResource("2_8iek7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_monyk")
+
+[node name="FSM" type="Node" parent="."]
+script = ExtResource("3_c82bi")
+
+[node name="Idle" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
+script = ExtResource("4_jwder")
+ghost_node = NodePath("../..")
+
+[node name="Chase" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
+script = ExtResource("5_m40xj")
+ghost_node = NodePath("../..")
+
+[node name="Scatter" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
+script = ExtResource("6_jwder")
+ghost_node = NodePath("../..")

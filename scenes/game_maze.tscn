@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://cu4klmtr45gw0"]
 
-[ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://script/game_maze.gd" id="1_jvsv4"]
+[ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://scripts/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
 [ext_resource type="PackedScene" uid="uid://b28gtepbxlljo" path="res://scenes/dot.tscn" id="3_py8pd"]
 [ext_resource type="Texture2D" uid="uid://cxpedg0by0dbv" path="res://assets/Dungeon_WallsAndFloors.png" id="3_v7xv8"]

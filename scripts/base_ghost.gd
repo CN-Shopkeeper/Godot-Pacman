@@ -1,0 +1,62 @@
+class_name BaseGhost
+extends BaseCharacter
+
+@export var speed = 240
+
+@export var floor_layer: TileMapLayer = null
+@export var wall_layer: TileMapLayer = null
+@export var visual_path_line2d: Line2D = null
+@export var pacman_node: CharacterBody2D = null
+
+const CHASE_BASE_SPEED = 240
+const SCATTER_SPEED = 160
+
+var pathfinding_grid: AStarGrid2D = AStarGrid2D.new()
+var spawn_pos: Vector2
+
+var path_to_target: Array = []
+
+func update_pathfinding_grid():
+	pathfinding_grid.region = floor_layer.get_used_rect()
+	pathfinding_grid.cell_size = GlobalVariables.tile_size
+	pathfinding_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	pathfinding_grid.update()
+	for cell in wall_layer.get_used_cells():
+		pathfinding_grid.set_point_solid(cell, true)
+
+
+func update_velocity(target_coor: Vector2i):
+	# 每次走到tile中心时判断
+	if Vector2i.ZERO == target_coor or not is_at_intersection():
+		return
+	target_coor = MazeGenerator.get_nearest_access_coor(GameData.maze, target_coor.x, target_coor.y)
+	path_to_target = pathfinding_grid.get_point_path(world_to_grid(position), target_coor)
+	#print(target_position," size ",path_to_target.size())
+	if path_to_target.size() > 1:
+		var dir = (path_to_target[1]-path_to_target[0]).normalized()
+		velocity = speed * dir
+		print("blink", velocity)
+		if visual_path_line2d:
+			visual_path_line2d.points = path_to_target
+
+func move_ghost(target_coor: Vector2i):
+	# 每次走到tile中心时判断
+	if Vector2i.ZERO == target_coor or not is_at_intersection():
+		return
+	target_coor = MazeGenerator.get_nearest_access_coor(GameData.maze, target_coor.x, target_coor.y)
+	path_to_target = pathfinding_grid.get_point_path(world_to_grid(position), target_coor)
+	#print(target_position," size ",path_to_target.size())
+	if path_to_target.size() > 1:
+		var dir = (path_to_target[1]-path_to_target[0]).normalized()
+		velocity = speed * dir
+
+		print("other", velocity)
+		if visual_path_line2d:
+			visual_path_line2d.points = path_to_target
+
+func get_chase_coor() -> Vector2i:
+	return Vector2i.ZERO
+
+func get_scatter_coor() -> Vector2i:
+	return Vector2i.ZERO
+

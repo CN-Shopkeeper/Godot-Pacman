@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://beaivfawl5y4r"]
 
-[ext_resource type="Script" uid="uid://crkvpiprjsdn7" path="res://script/autoload_global_variables.gd" id="1_a3eco"]
+[ext_resource type="Script" uid="uid://crkvpiprjsdn7" path="res://scripts/autoload_global_variables.gd" id="1_a3eco"]
 
 [node name="TestGlobalVariables" type="Control"]
 layout_mode = 3
