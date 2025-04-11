@@ -328,7 +328,16 @@ bus = &"Music"
 [node name="SFXAP" type="AudioStreamPlayer" parent="."]
 bus = &"SFX"
 
-[node name="Timer" type="Timer" parent="."]
+[node name="FrightenedTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ChaseTimer" type="Timer" parent="."]
+wait_time = 20.0
+one_shot = true
+
+[node name="ScatterTimer" type="Timer" parent="."]
+wait_time = 7.0
+one_shot = true
 
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/Yes" to="." method="_on_yes_button_pressed"]
 [connection signal="pressed" from="BackToMainMenu/VBoxContainer/HBoxContainer/No" to="." method="_on_no_button_pressed"]

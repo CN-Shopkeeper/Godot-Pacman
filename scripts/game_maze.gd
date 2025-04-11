@@ -14,7 +14,9 @@ extends Control
 @onready var game_start_ap: AudioStreamPlayer = $GameStartAP
 @onready var background_music_ap: AudioStreamPlayer = $BackgroundMusicAP
 @onready var sfxap: AudioStreamPlayer = $SFXAP
-@onready var timer: Timer = $Timer
+@onready var frightened_timer: Timer = $FrightenedTimer
+@onready var chase_timer: Timer = $ChaseTimer
+@onready var scatter_timer: Timer = $ScatterTimer
 
 @onready var background: ColorRect = $Background
 
@@ -57,7 +59,40 @@ func _ready() -> void:
 	get_tree().paused = false
 	game_started = true
 	background_music_ap.play()
+	chase_timer.start()
+
 	SignalBus.connect("dot_eaten", _play_dot_eaten)
+
+	# frightened结束后，恢复chase
+	frightened_timer.timeout.connect(func():
+		background_music_ap.stream = BGM_NORMAL
+		background_music_ap.play()
+
+		ghost_blinky.change_state(ghost_blinky.States.Chase)
+		ghost_clyde.change_state(ghost_clyde.States.Chase)
+		ghost_inky.change_state(ghost_inky.States.Chase)
+		ghost_pinky.change_state(ghost_pinky.States.Chase)
+		)
+
+	# chase 20秒后进入 scatter，以frightened优先
+	chase_timer.timeout.connect(func():
+		scatter_timer.start()
+		if frightened_timer.is_stopped():
+			ghost_blinky.change_state(ghost_blinky.States.Scatter)
+			ghost_clyde.change_state(ghost_clyde.States.Scatter)
+			ghost_inky.change_state(ghost_inky.States.Scatter)
+			ghost_pinky.change_state(ghost_pinky.States.Scatter)
+		)
+
+	# scatter 7秒后进入 chase，以frightened优先
+	scatter_timer.timeout.connect(func():
+		chase_timer.start()
+		if frightened_timer.is_stopped():
+			ghost_blinky.change_state(ghost_blinky.States.Chase)
+			ghost_clyde.change_state(ghost_clyde.States.Chase)
+			ghost_inky.change_state(ghost_inky.States.Chase)
+			ghost_pinky.change_state(ghost_pinky.States.Chase)
+		)
 
 
 func _input(event: InputEvent) -> void:
@@ -123,32 +158,24 @@ func _create_maze():
 				floor_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_FLOOR_TILE_INDEX)
 
 func _play_dot_eaten(dot):
-	if "power_dot" ==  dot:
+	if "power_dot" == dot:
 		sfxap.stream = POWER_DOT_EATEN
 		sfxap.play()
-		
+
 		background_music_ap.stream = BGM_SPECIAL
 		background_music_ap.play()
-		
-		
+
+		# 能量豆，全员进入frightened
 		ghost_blinky.change_state(ghost_blinky.States.Frightened)
 		ghost_clyde.change_state(ghost_clyde.States.Frightened)
 		ghost_inky.change_state(ghost_inky.States.Frightened)
 		ghost_pinky.change_state(ghost_pinky.States.Frightened)
-		
-		timer.wait_time=10
-		timer.start()
-		await  timer.timeout
-		
-		background_music_ap.stream = BGM_NORMAL
-		background_music_ap.play()
-		
-		ghost_blinky.change_state(ghost_blinky.States.Chase)
-		ghost_clyde.change_state(ghost_clyde.States.Chase)
-		ghost_inky.change_state(ghost_inky.States.Chase)
-		ghost_pinky.change_state(ghost_pinky.States.Chase)
+
+		# todo 根据游戏状态设定时间
+		frightened_timer.wait_time = 10
+		frightened_timer.start()
 	else:
-		sfxap.stream = DOT_EATEN	
+		sfxap.stream = DOT_EATEN
 		sfxap.play()
 
 func _on_no_button_pressed() -> void:
