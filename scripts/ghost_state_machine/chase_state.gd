@@ -6,4 +6,3 @@ func enter():
 
 func physics_update(delta: float):
 	ghost_node.update_velocity(ghost_node.get_chase_coor())
-

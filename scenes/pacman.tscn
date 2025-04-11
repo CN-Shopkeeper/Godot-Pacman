@@ -14,9 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://caanh7p6rbhec" path="res://assets/sprites/pacman-up/2.png" id="11_2vipk"]
 [ext_resource type="Texture2D" uid="uid://ckv3fgsp3wonv" path="res://assets/sprites/pacman-up/3.png" id="12_1gynd"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_jno2f"]
-radius = 7.5
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_tjtka"]
 animations = [{
 "frames": [{
@@ -75,6 +72,9 @@ animations = [{
 "name": &"up",
 "speed": 10.0
 }]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jno2f"]
+radius = 7.5
 
 [sub_resource type="Animation" id="Animation_n0x1e"]
 length = 0.3
@@ -257,13 +257,12 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_cc2ie")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_jno2f")
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tjtka")
 animation = &"left"
-frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_jno2f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

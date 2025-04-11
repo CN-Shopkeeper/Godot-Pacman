@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://tdykqjvh1jcn"]
+[gd_scene load_steps=10 format=3 uid="uid://tdykqjvh1jcn"]
 
 [ext_resource type="Script" uid="uid://d1vqxjt6voiqc" path="res://scripts/ghost_blinky.gd" id="1_4rftu"]
 [ext_resource type="Texture2D" uid="uid://bf0pr3p50ws4l" path="res://assets/sprites/ghosts/blinky.png" id="1_sqryi"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://b81u4bkwlp31s" path="res://scripts/ghost_state_machine/idle_state.gd" id="4_3iyxj"]
 [ext_resource type="Script" uid="uid://cx8ea8e7sc56w" path="res://scripts/ghost_state_machine/chase_state.gd" id="4_tu7re"]
 [ext_resource type="Script" uid="uid://bcymvjt3tyur6" path="res://scripts/ghost_state_machine/scatter_state.gd" id="6_2rfh3"]
+[ext_resource type="Script" uid="uid://cdgjvag5j3vaw" path="res://scripts/ghost_state_machine/frightened_state.gd" id="7_yldsj"]
+[ext_resource type="Script" uid="uid://hyxryvp7nw62" path="res://scripts/ghost_state_machine/eaten_state.gd" id="8_dwype"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_monyk"]
 radius = 7.9
@@ -22,6 +24,13 @@ texture = ExtResource("1_sqryi")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_monyk")
 
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_monyk")
+
 [node name="FSM" type="Node" parent="."]
 script = ExtResource("3_monyk")
 
@@ -36,3 +45,13 @@ ghost_node = NodePath("../..")
 [node name="Scatter" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
 script = ExtResource("6_2rfh3")
 ghost_node = NodePath("../..")
+
+[node name="Frightened" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
+script = ExtResource("7_yldsj")
+ghost_node = NodePath("../..")
+
+[node name="Eaten" type="Node" parent="FSM" node_paths=PackedStringArray("ghost_node")]
+script = ExtResource("8_dwype")
+ghost_node = NodePath("../..")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

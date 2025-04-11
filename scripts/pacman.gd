@@ -1,8 +1,6 @@
 extends BaseCharacter
 
 
-const SPEED = 256
-
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var at_state_machine = animation_tree["parameters/playback"]
 
@@ -16,6 +14,7 @@ var direction = D_RIGHT
 var next_direction = Vector2i.ZERO
 
 func _ready() -> void:
+	speed = 256
 	position = grid_to_world(GlobalVariables.pacman_spawn_coor)
 
 
@@ -35,9 +34,6 @@ func _physics_process(delta: float) -> void:
 	pass
 
 
-func move_to_grid_center():
-	position = grid_to_world(world_to_grid(position))
-
 func _try_turn():
 	if Vector2i.ZERO == next_direction:
 		return
@@ -48,7 +44,7 @@ func _try_turn():
 		direction = next_direction
 		next_direction = Vector2i.ZERO
 		move_to_grid_center()
-		velocity = direction * SPEED
+		velocity = direction * speed
 
 func _update_animation():
 	animation_tree.set(blend_pos_path, direction)
