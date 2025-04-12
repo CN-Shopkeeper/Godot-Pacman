@@ -6,7 +6,9 @@ var scatter_attemp_index = 0
 
 func enter():
 	reach_scatter_point = false
-	# todo 修改样式
+	# 修改样式
+	ghost_node.sprite_2d.texture = ghost_node.get_normal_texture()
+	ghost_node.modulate = Color.WHITE
 	ghost_node.speed = ghost_node.CHASE_BASE_SPEED
 
 func physics_update(delta: float):
@@ -34,7 +36,7 @@ func physics_update(delta: float):
 
 	if not reach_scatter_point:
 		ghost_node.update_velocity(ghost_node.get_scatter_coor())
-		
+
 	else:
 		var clockwise_coor_of_now_dir = now_coor + DIRECTIONS[(scatter_attemp_index + 1)%4]
 		var counter_clock_coor_of_now_dir = now_coor + DIRECTIONS[(scatter_attemp_index + 3)%4]

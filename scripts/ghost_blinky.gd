@@ -3,6 +3,7 @@ extends BaseGhost
 
 # todo angry mode
 func _ready() -> void:
+	super._ready()
 	is_waiting = false
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
 	spawn_coor = GlobalVariables.blinky_spawn_coor
@@ -16,6 +17,9 @@ func _physics_process(delta: float) -> void:
 	fsm.physics_update(delta)
 	move_and_slide()
 
+func get_normal_texture() -> Texture2D:
+	return preload("res://assets/sprites/ghosts/blinky.png")
+
 func get_chase_coor() -> Vector2i:
 	return world_to_grid(pacman_node.position)
 
@@ -24,10 +28,5 @@ func get_scatter_coor() -> Vector2i:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	var current_state_name = fsm.current_state.name
-	if current_state_name == "Frightened":
-		SignalBus.emit_ghost_eaten()
-		change_state(States.Eaten)
-	elif -1 != ["Chase", "Scatter"].find(current_state_name):
-		#print("catch")
-		pass  # Replace with function body.
+	# 默认只有pacman与之交互碰撞
+	on_body_entered_func()

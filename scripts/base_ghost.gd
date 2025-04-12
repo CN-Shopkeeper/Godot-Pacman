@@ -7,7 +7,9 @@ extends BaseCharacter
 @export var visual_path_line2d: Line2D = null
 @export var pacman_node: CharacterBody2D = null
 
+@onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var fsm: StateMachine = $FSM
+@onready var timer: Timer = $Timer
 
 enum States {Idle, Chase, Scatter, Frightened, Eaten}
 
@@ -24,6 +26,11 @@ var spawn_coor: Vector2i
 var spawn_pos: Vector2
 
 var path_to_target: Array = []
+
+func _ready() -> void:
+	timer.timeout.connect(func():
+		visible = !visible
+	)
 
 func change_state(new_state: States):
 	if is_waiting:
@@ -56,6 +63,8 @@ func update_velocity(target_coor: Vector2i):
 	#for path in path_to_target:
 		#print(path)
 
+func get_normal_texture() -> Texture2D:
+	return preload("res://assets/sprites/ghosts/blue_ghost.png")
 
 func get_chase_coor() -> Vector2i:
 	return Vector2i.ZERO
@@ -96,6 +105,16 @@ func get_frightened_coor() -> Vector2i:
 
 func get_eaten_coor() -> Vector2i:
 	return spawn_coor
+
+func on_body_entered_func():
+	var current_state_name = fsm.current_state.name
+	if current_state_name == "Frightened":
+		SignalBus.emit_ghost_eaten()
+		change_state(States.Eaten)
+	elif -1 != ["Chase", "Scatter"].find(current_state_name):
+		#print("catch")
+		pass  # Replace with function body.
+
 
 func is_return_to_spawn():
 	if world_to_grid(position) == spawn_coor:

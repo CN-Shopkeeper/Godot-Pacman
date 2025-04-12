@@ -105,6 +105,11 @@ func _ready() -> void:
 			ghost_pinky.change_state(ghost_pinky.States.Chase)
 		)
 
+func _physics_process(delta: float) -> void:
+	if not frightened_timer.is_stopped():
+		GameData.frightened_time_left = frightened_timer.time_left
+	else:
+		GameData.frightened_time_left = 0
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_pause"):

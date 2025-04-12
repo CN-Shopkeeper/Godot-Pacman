@@ -1,8 +1,10 @@
 extends BaseState
-
+const BLUE_GHOST = preload("res://assets/sprites/ghosts/blue_ghost.png")
 
 func enter():
-	# todo 修改样式
+	# 修改样式
+	ghost_node.sprite_2d.texture = BLUE_GHOST
+	ghost_node.modulate = Color(1, 1, 1, 0.5)
 	ghost_node.speed = ghost_node.EATEN_SPEED
 
 func physics_update(delta: float):

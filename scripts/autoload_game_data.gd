@@ -4,6 +4,8 @@ var maze
 var dot_cnt_total: int
 var dot_cnt_left: int
 
+var frightened_time_left: float
+
 func _ready() -> void:
 	SignalBus.dot_eaten.connect(_on_dot_eaten)
 

@@ -5,7 +5,9 @@ extends BaseGhost
 
 
 func _ready() -> void:
+	super._ready()
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
+	spawn_coor = GlobalVariables.inky_spawn_coor
 	spawn_pos = grid_to_world(GlobalVariables.inky_spawn_coor)
 	position = spawn_pos
 
@@ -19,6 +21,9 @@ func _physics_process(delta: float) -> void:
 	fsm.physics_update(delta)
 	move_and_slide()
 
+func get_normal_texture() -> Texture2D:
+	return preload("res://assets/sprites/ghosts/inky.png")
+
 func get_chase_coor() -> Vector2i:
 	if pacman_node and blinky_node:
 		var pinky_target_coor = world_to_grid(pacman_node.position) + pacman_node.direction * 2
@@ -28,3 +33,7 @@ func get_chase_coor() -> Vector2i:
 
 func get_scatter_coor() -> Vector2i:
 	return GlobalVariables.bottom_right_corner_coor
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	on_body_entered_func()
