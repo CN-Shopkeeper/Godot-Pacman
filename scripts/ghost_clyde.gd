@@ -6,6 +6,11 @@ func _ready() -> void:
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
 	spawn_pos = grid_to_world(GlobalVariables.clyde_spawn_coor)
 	position = spawn_pos
+	SignalBus.clyde_time_to_go.connect(func():
+		is_waiting = false
+		change_state(States.Chase)
+		print("clyde coming")
+	)
 
 func _physics_process(delta: float) -> void:
 	fsm.physics_update(delta)

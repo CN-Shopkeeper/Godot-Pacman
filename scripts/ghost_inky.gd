@@ -9,6 +9,12 @@ func _ready() -> void:
 	spawn_pos = grid_to_world(GlobalVariables.inky_spawn_coor)
 	position = spawn_pos
 
+	SignalBus.inky_time_to_go.connect(func():
+		is_waiting = false
+		change_state(States.Chase)
+		print("inky coming")
+		)
+
 func _physics_process(delta: float) -> void:
 	fsm.physics_update(delta)
 	move_and_slide()

@@ -1,8 +1,8 @@
 class_name MazeGenerator
 extends Resource
 
-enum Maze_tile {WALL, DOT,POWER_DOT, PACMAN_SPAWN, GHOST_SPAWN, GHOST_SPAWN_BODER}
-const GHOST_ACCESS_TILE = [Maze_tile.DOT,Maze_tile.POWER_DOT, Maze_tile.PACMAN_SPAWN, Maze_tile.GHOST_SPAWN]
+enum Maze_tile {WALL, DOT, POWER_DOT, PACMAN_SPAWN, GHOST_SPAWN, GHOST_SPAWN_BODER}
+const GHOST_ACCESS_TILE = [Maze_tile.DOT, Maze_tile.POWER_DOT, Maze_tile.PACMAN_SPAWN, Maze_tile.GHOST_SPAWN]
 const half_cell_height = 9
 const half_cell_width = 5
 # 27
@@ -50,7 +50,7 @@ func generate_maze_tiles():
 	_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -2, 1, Maze_tile.POWER_DOT)
 	_set_maze_tile(maze_tiles, 1, MAZE_TILE_HEIGHT -2, Maze_tile.POWER_DOT)
 	_set_maze_tile(maze_tiles, MAZE_TILE_WIDTH -2, MAZE_TILE_HEIGHT -2, Maze_tile.POWER_DOT)
-	
+
 	# 复制half_paths的数据
 	for x in range(half_path_width -1):
 		for y in range(1, half_path_height):
@@ -119,6 +119,7 @@ func _generate_half_maze_cells():
 	_set_half_maze_cell(half_maze_cells, half_cell_width -2, GHOST_GATE_CELL_TOP, flag)
 	_set_half_maze_cell(half_maze_cells, half_cell_width -2, GHOST_GATE_CELL_TOP + 1, flag)
 
+
 	flag += 1
 	# 随机遍历所有cells，如果其为0，则生成tetris cells
 	var cell_random_indexes = []
@@ -166,7 +167,7 @@ func _generate_tetris_cells_bfs(half_maze_cells: Array, start_x: int, start_y: i
 
 		for neighbor in cell_neighbors:
 			candidate_queue.push_back(neighbor)
-		
+
 		_shuffle_array(candidate_queue)
 
 # 获取待生成的tetris的cell数量（2~5）
@@ -256,6 +257,11 @@ static func get_ghost_access_dirs(maze_tiles, x, y) -> Array[Vector2i]:
 		if maze_in_bounds(neighbor_x, neighbor_y) and GHOST_ACCESS_TILE.find(get_maze_tile(maze_tiles, neighbor_x, neighbor_y)) != -1:
 			results.append(dir)
 	return results
+
+static func is_ghost_accessible(maze_tiles, x, y):
+	if not maze_in_bounds(x, y):
+		return false
+	return GHOST_ACCESS_TILE.find(get_maze_tile(maze_tiles, x, y)) != -1
 
 static func maze_in_bounds(x, y):
 	return 0 <= x and x < MAZE_TILE_WIDTH and 0 <= y and y < MAZE_TILE_HEIGHT

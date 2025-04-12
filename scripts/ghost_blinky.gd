@@ -3,13 +3,13 @@ extends BaseGhost
 
 # todo angry mode
 func _ready() -> void:
-	is_waiting=false
+	is_waiting = false
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
 	spawn_coor = GlobalVariables.blinky_spawn_coor
 	spawn_pos = grid_to_world(GlobalVariables.blinky_spawn_coor)
 	position = spawn_pos
-	
-	change_state(States.Chase)
+
+	change_state(States.Scatter)
 
 
 func _physics_process(delta: float) -> void:

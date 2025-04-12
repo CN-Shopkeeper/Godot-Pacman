@@ -15,8 +15,8 @@ const CHASE_BASE_SPEED = 240
 const FRIGHTENED_SPEED = 160
 const EATEN_SPEED = 384
 
-var is_waiting=true
-var now_state:States
+var is_waiting = true
+var now_state: States
 var now_dir: Vector2i
 
 var pathfinding_grid: AStarGrid2D = AStarGrid2D.new()
@@ -25,7 +25,7 @@ var spawn_pos: Vector2
 
 var path_to_target: Array = []
 
-func change_state(new_state:States):
+func change_state(new_state: States):
 	if is_waiting:
 		return
 	fsm.switch_to(new_state)
@@ -99,6 +99,12 @@ func get_eaten_coor() -> Vector2i:
 
 func is_return_to_spawn():
 	if world_to_grid(position) == spawn_coor:
+		move_to_grid_center()
+		return true
+	return false
+
+func is_reach_scatter_point():
+	if world_to_grid(position) == get_scatter_coor():
 		move_to_grid_center()
 		return true
 	return false

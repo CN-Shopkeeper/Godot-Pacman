@@ -59,9 +59,10 @@ func _ready() -> void:
 	get_tree().paused = false
 	game_started = true
 	background_music_ap.play()
-	chase_timer.start()
+	# 首先进入scatter模式
+	scatter_timer.start()
 
-	SignalBus.connect("dot_eaten", _play_dot_eaten)
+	SignalBus.dot_eaten.connect(_play_dot_eaten)
 
 	# frightened结束后，恢复chase
 	frightened_timer.timeout.connect(func():
@@ -107,14 +108,16 @@ func _input(event: InputEvent) -> void:
 func _create_maze():
 	var generator = MazeGenerator.new("cry")
 	var maze = generator.generate_maze_tiles()
-	GameData.maze = maze
+	var dot_cnt = 0
 	for x in MazeGenerator.MAZE_TILE_WIDTH:
 		for y in MazeGenerator.MAZE_TILE_HEIGHT:
 			var tile = MazeGenerator.get_maze_tile(maze, x, y)
 			if MazeGenerator.Maze_tile.DOT == tile:
+				dot_cnt += 1
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 				food_layer.set_cell(Vector2i(x, y), 0, Vector2i.ZERO, 1)
 			elif MazeGenerator.Maze_tile.POWER_DOT == tile:
+				dot_cnt += 1
 				floor_layer.set_cell(Vector2i(x, y), 0, PATH_FLOOR_TILE_INDEX)
 				food_layer.set_cell(Vector2i(x, y), 0, Vector2i.ZERO, 2)
 			elif MazeGenerator.Maze_tile.PACMAN_SPAWN == tile:
@@ -156,6 +159,8 @@ func _create_maze():
 
 			elif MazeGenerator.Maze_tile.GHOST_SPAWN == tile:
 				floor_layer.set_cell(Vector2i(x, y), 0, GHOST_SPAWN_FLOOR_TILE_INDEX)
+
+	GameData.init_maze(maze, dot_cnt)
 
 func _play_dot_eaten(dot):
 	if "power_dot" == dot:
