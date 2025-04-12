@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cu4klmtr45gw0"]
+[gd_scene load_steps=20 format=3 uid="uid://cu4klmtr45gw0"]
 
 [ext_resource type="Script" uid="uid://bsdteixewgjnn" path="res://scripts/game_maze.gd" id="1_jvsv4"]
 [ext_resource type="Script" uid="uid://b18i4t8jf0d3j" path="res://addons/animatedbutton/AnimatedButton.gd" id="2_hlrt2"]
@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://c8x26hub858s0" path="res://scenes/ghost_pinky.tscn" id="8_hk83x"]
 [ext_resource type="AudioStream" uid="uid://53iopq4fyi1d" path="res://assets/sound_effects/game_start_count_down.mp3" id="10_hk83x"]
 [ext_resource type="AudioStream" uid="uid://bt50do7jegk0e" path="res://assets/sound_effects/bgm_normal.wav" id="11_vf8bg"]
+[ext_resource type="AudioStream" uid="uid://bech6mkgkx4jk" path="res://assets/sound_effects/dot_eaten.wav" id="13_y70hq"]
+[ext_resource type="AudioStream" uid="uid://bccn1tlndf6sa" path="res://assets/sound_effects/power_dot_eaten.wav" id="14_b56ut"]
+[ext_resource type="AudioStream" uid="uid://bjxol55w5rg84" path="res://assets/sound_effects/ghost_eaten.wav" id="15_b56ut"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yvddi"]
 texture = ExtResource("3_v7xv8")
@@ -317,15 +320,24 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
 
-[node name="GameStartAP" type="AudioStreamPlayer" parent="."]
+[node name="GameControlAP" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_hk83x")
-bus = &"Music"
+bus = &"SFX"
 
 [node name="BackgroundMusicAP" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_vf8bg")
 bus = &"Music"
 
-[node name="SFXAP" type="AudioStreamPlayer" parent="."]
+[node name="SFXDotEatenAP" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_y70hq")
+bus = &"SFX"
+
+[node name="SFXPowerDotEatenAP" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_b56ut")
+bus = &"SFX"
+
+[node name="SFXGhostEatenAP" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_b56ut")
 bus = &"SFX"
 
 [node name="FrightenedTimer" type="Timer" parent="."]

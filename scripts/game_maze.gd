@@ -11,20 +11,23 @@ extends Control
 @onready var ghost_clyde: GhostClyde = $Maze/GhostClyde
 @onready var ghost_inky: GhostInky = $Maze/GhostInky
 @onready var ghost_pinky: GhostPinky = $Maze/GhostPinky
-@onready var game_start_ap: AudioStreamPlayer = $GameStartAP
+@onready var game_control_ap: AudioStreamPlayer = $GameControlAP
 @onready var background_music_ap: AudioStreamPlayer = $BackgroundMusicAP
-@onready var sfxap: AudioStreamPlayer = $SFXAP
 @onready var frightened_timer: Timer = $FrightenedTimer
 @onready var chase_timer: Timer = $ChaseTimer
 @onready var scatter_timer: Timer = $ScatterTimer
+@onready var sfx_power_dot_eaten_ap: AudioStreamPlayer = $SFXPowerDotEatenAP
+@onready var sfx_dot_eaten_ap: AudioStreamPlayer = $SFXDotEatenAP
+@onready var sfx_ghost_eaten_ap: AudioStreamPlayer = $SFXGhostEatenAP
 
 @onready var background: ColorRect = $Background
 
 const MAIN_MENU_PATH = "res://scenes/main_menu.tscn"
 const PACMAN = preload("res://scenes/pacman.tscn")
 const GHOST_BLINKY = preload("res://scenes/ghost_blinky.tscn")
-const DOT_EATEN = preload("res://assets/sound_effects/dot_eaten.wav")
-const POWER_DOT_EATEN = preload("res://assets/sound_effects/power_dot_eaten.wav")
+const GAME_START_COUNT_DOWN = preload("res://assets/sound_effects/game_start_count_down.mp3")
+const GHOST_EATEN = preload("res://assets/sound_effects/ghost_eaten.wav")
+const PAUSE = preload("res://assets/sound_effects/pause.mp3")
 const BGM_SPECIAL = preload("res://assets/sound_effects/bgm_special.wav")
 const BGM_NORMAL = preload("res://assets/sound_effects/bgm_normal.wav")
 #const FLOOR_TILE_INDEX = Vector2i(4,20)
@@ -54,15 +57,22 @@ func _ready() -> void:
 
 	# 游戏开始音效
 	get_tree().paused = true
-	game_start_ap.play()
-	await game_start_ap.finished
+	game_control_ap.stream = GAME_START_COUNT_DOWN
+	game_control_ap.play()
+	await game_control_ap.finished
 	get_tree().paused = false
 	game_started = true
+	# 切换为暂停音效
+	game_control_ap.stream = PAUSE
+
 	background_music_ap.play()
 	# 首先进入scatter模式
 	scatter_timer.start()
 
 	SignalBus.dot_eaten.connect(_play_dot_eaten)
+	SignalBus.ghost_eaten.connect(func():
+		sfx_ghost_eaten_ap.play()
+		)
 
 	# frightened结束后，恢复chase
 	frightened_timer.timeout.connect(func():
@@ -100,10 +110,18 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_pause"):
 		if not game_started:
 			return
-		get_tree().paused = !get_tree().paused
-		back_to_main_menu.visible = !back_to_main_menu.visible
-		if back_to_main_menu.visible:
+		if not get_tree().paused:
+			get_tree().paused = true
+			back_to_main_menu.visible = true
 			back_to_main_menu_no_button.grab_focus()
+			background_music_ap.stop()
+			game_control_ap.play()
+		else:
+			get_tree().paused = false
+			back_to_main_menu.visible = false
+			game_control_ap.play()
+			background_music_ap.play()
+
 
 func _create_maze():
 	var generator = MazeGenerator.new("cry")
@@ -164,8 +182,7 @@ func _create_maze():
 
 func _play_dot_eaten(dot):
 	if "power_dot" == dot:
-		sfxap.stream = POWER_DOT_EATEN
-		sfxap.play()
+		sfx_power_dot_eaten_ap.play()
 
 		background_music_ap.stream = BGM_SPECIAL
 		background_music_ap.play()
@@ -176,16 +193,19 @@ func _play_dot_eaten(dot):
 		ghost_inky.change_state(ghost_inky.States.Frightened)
 		ghost_pinky.change_state(ghost_pinky.States.Frightened)
 
-		# todo 根据游戏状态设定时间
-		frightened_timer.wait_time = 10
+
+		# 根据游戏状态设定时间
+		var frightened_time = lerp(GlobalVariables.frightened_time_min, GlobalVariables.frightened_time_max, GameData.dot_cnt_left * 1.0 / GameData.dot_cnt_total * 1.0)
+		frightened_timer.wait_time = frightened_time
 		frightened_timer.start()
 	else:
-		sfxap.stream = DOT_EATEN
-		sfxap.play()
+		sfx_dot_eaten_ap.play()
 
 func _on_no_button_pressed() -> void:
 	back_to_main_menu.hide()
 	get_tree().paused = false
+	game_control_ap.play()
+	background_music_ap.play()
 
 func _on_yes_button_pressed() -> void:
 	get_tree().paused = false

@@ -16,3 +16,5 @@ extends Node
 @export var bottom_left_corner_coor: Vector2i = Vector2i(1, 28)
 @export var top_left_corner_coor: Vector2i = Vector2i(1, 1)
 @export var bottom_right_corner_coor: Vector2i = Vector2i(30, 28)
+@export var frightened_time_min: float = 5
+@export var frightened_time_max: float = 10

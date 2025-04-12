@@ -15,6 +15,7 @@ func physics_update(delta: float):
 	var now_coor = ghost_node.world_to_grid(ghost_node.position)
 	if not reach_scatter_point:
 		reach_scatter_point = ghost_node.is_reach_scatter_point()
+		# 确定起始方向
 		# 如果刚到达scatter的角点，需要确定旋转的第一个方向。也可以直接硬编码
 		if reach_scatter_point:
 			var access_dirs_index = []
@@ -33,7 +34,7 @@ func physics_update(delta: float):
 
 	if not reach_scatter_point:
 		ghost_node.update_velocity(ghost_node.get_scatter_coor())
-		# todo 确定起始方向
+		
 	else:
 		var clockwise_coor_of_now_dir = now_coor + DIRECTIONS[(scatter_attemp_index + 1)%4]
 		var counter_clock_coor_of_now_dir = now_coor + DIRECTIONS[(scatter_attemp_index + 3)%4]
@@ -49,6 +50,3 @@ func physics_update(delta: float):
 		else:
 			ghost_node.update_velocity(counter_clock_coor_of_now_dir)
 			scatter_attemp_index = (scatter_attemp_index + 3)%4
-
-
-

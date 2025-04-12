@@ -26,7 +26,7 @@ func get_scatter_coor() -> Vector2i:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	var current_state_name = fsm.current_state.name
 	if current_state_name == "Frightened":
-		#print("eaten")
+		SignalBus.emit_ghost_eaten()
 		change_state(States.Eaten)
 	elif -1 != ["Chase", "Scatter"].find(current_state_name):
 		#print("catch")
