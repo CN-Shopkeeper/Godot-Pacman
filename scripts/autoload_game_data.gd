@@ -1,5 +1,7 @@
 extends Node
 
+var seed
+
 var maze
 var dot_cnt_total: int
 var dot_cnt_left: int
@@ -8,9 +10,13 @@ var frightened_time_left: float
 
 var lives_remaining: int
 var score: int
+var highest_score: int
 var consecutive_kills_cnt: int
 
-var now_ghost_action_mode
+var now_ghost_action_mode = BaseGhost.States.Scatter
+
+
+
 
 func _ready() -> void:
 	SignalBus.dot_eaten.connect(_on_dot_eaten)
@@ -29,6 +35,7 @@ func lives_reduce():
 		lives_remaining -= 1
 		SignalBus.emit_lives_remaining_changed(lives_remaining)
 	elif lives_remaining == 0:
+		lives_remaining -= 1
 		SignalBus.emit_no_lives_remains()
 
 

@@ -9,3 +9,7 @@
 - Game Start Countdown: [Comical Piano Descent](https://pixabay.com/sound-effects/comical-piano-descent-274050/)
 
 - Game Pause: [pause](https://pixabay.com/sound-effects/pause-89443/)
+
+- Game Win: [WinGrandPiano](https://pixabay.com/sound-effects/wingrandpiano-96338/)
+
+- Game Lose: [080047_Lose_Funny_Retro_Video Game](https://pixabay.com/sound-effects/080047-lose-funny-retro-video-game-80925/)

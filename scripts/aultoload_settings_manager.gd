@@ -5,6 +5,8 @@ const SETTINGS_FILE = "user://settings.cfg"
 
 var config = ConfigFile.new()
 
+var assist_mode_on: bool
+
 func _ready():
 	# 加载设置
 	load_settings()
@@ -18,9 +20,15 @@ func load_settings():
 		# 加载全屏设置
 		var is_fullscreen = config.get_value("display", "fullscreen", false)
 		# 加载音量设置
-		var master_volume = config.get_value("audio", "master_volume", 1.0)
-		var music_volume = config.get_value("audio", "music_volume", 1.0)
-		var sfx_volume = config.get_value("audio", "sfx_volume", 1.0)
+		var master_volume = config.get_value("audio", "master_volume", 0.5)
+		var music_volume = config.get_value("audio", "music_volume", 0.5)
+		var sfx_volume = config.get_value("audio", "sfx_volume", 0.5)
+		# 加载最高分
+		var highest_score = config.get_value("data", "highest_score", 0)
+		GameData.highest_score = highest_score
+		# 加载辅助模式
+		assist_mode_on = config.get_value("game_play", "assist_mode", false)
+
 
 		_set_fullscreen(is_fullscreen)
 		_set_volume("Master", master_volume)
@@ -28,11 +36,21 @@ func load_settings():
 		_set_volume("SFX", sfx_volume)
 	else:
 		# 文件不存在，使用默认设置
-		set_and_save_volume("Master", 1.0)  # 默认主音量
-		set_and_save_volume("Music", 1.0)  # 默认音乐音量
-		set_and_save_volume("SFX", 1.0)  # 默认音效音量
+		set_and_save_volume("Master", 0.5)  # 默认主音量
+		set_and_save_volume("Music", 0.5)  # 默认音乐音量
+		set_and_save_volume("SFX", 0.5)  # 默认音效音量
 		set_and_save_fullscreen_setting(false)  # 默认窗口模式
+		GameData.highest_score = 0
+		assist_mode_on = false
 
+func save_assist_mode():
+	config.set_value("game_play", "assist_mode", assist_mode_on)
+	_save_settings()
+
+func save_highest_score():
+	if GameData.score > GameData.highest_score:
+		config.set_value("data", "highest_score", GameData.score)
+	_save_settings()
 
 # 保存全屏设置
 func set_and_save_fullscreen_setting(is_fullscreen: bool):
@@ -51,6 +69,7 @@ func set_and_save_volume(bus_name: StringName, volumn: float):
 	elif "SFX" == bus_name:
 		config.set_value("audio", "sfx_volume", volumn)
 	_save_settings()
+
 
 func _set_fullscreen(_is_fullscreen: bool):
 	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if _is_fullscreen else DisplayServer.WINDOW_MODE_MAXIMIZED

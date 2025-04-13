@@ -12,6 +12,8 @@ extends Control
 @onready var settings_menu_back_button: AnimatedButton = $CenterContainer/SettingsMenu/Back
 @onready var credits_menu_back_button: AnimatedButton = $CenterContainer/CreditsMenu/Back
 @onready var background: ColorRect = $Background
+@onready var assist_mode_check_box: CheckBox = $CenterContainer/SettingsMenu/AssistMode
+@onready var seed_line_edit: LineEdit = $HBoxContainer/SeedLineEdit
 
 const GAME_MAP_PATH = "res://scenes/game_maze.tscn"
 
@@ -23,8 +25,14 @@ func _ready() -> void:
 	main_vol_slider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
 	music_vol_slider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	sfx_vol_slider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
+	assist_mode_check_box.set_pressed_no_signal(SettingsManager.assist_mode_on)
 
 func _on_play_button_pressed() -> void:
+	if seed_line_edit.text:
+		GameData.seed = seed_line_edit.text
+	else:
+		var timestamp_seconds = Time.get_unix_time_from_system()
+		GameData.seed = str(timestamp_seconds)
 	IndieBlueprintSceneTransitioner.transition_to(
 		GAME_MAP_PATH,
 		IndieBlueprintPremadeTransitions.Dissolve,
@@ -83,3 +91,12 @@ func _on_music_vol_slider_value_changed(value: float) -> void:
 
 func _on_sfx_vol_slider_value_changed(value: float) -> void:
 	SettingsManager.set_and_save_volume("SFX", value)
+
+
+func _on_assist_mode_toggled(toggled_on: bool) -> void:
+	print("213")
+	SettingsManager.assist_mode_on = toggled_on
+	SettingsManager.save_assist_mode()
+
+func _on_seed_check_box_toggled(toggled_on: bool) -> void:
+	seed_line_edit.visible = toggled_on

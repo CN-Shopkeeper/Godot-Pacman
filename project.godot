@@ -23,10 +23,10 @@ config/icon="res://icon.svg"
 [autoload]
 
 SignalBus="*res://scripts/autoload_signal_bus.gd"
+GameData="*res://scripts/autoload_game_data.gd"
 SettingsManager="*res://scripts/aultoload_settings_manager.gd"
 GlobalVariables="*res://scripts/autoload_global_variables.gd"
 IndieBlueprintSceneTransitioner="*res://addons/ninetailsrabbit.indie_blueprint_scene_transition/src/scene_transitioner.tscn"
-GameData="*res://scripts/autoload_game_data.gd"
 
 [display]
 

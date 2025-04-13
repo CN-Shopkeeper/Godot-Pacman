@@ -19,10 +19,11 @@ extends Control
 @onready var sfx_power_dot_eaten_ap: AudioStreamPlayer = $SFXPowerDotEatenAP
 @onready var sfx_dot_eaten_ap: AudioStreamPlayer = $SFXDotEatenAP
 @onready var sfx_ghost_eaten_ap: AudioStreamPlayer = $SFXGhostEatenAP
-@onready var lives_label: Label = $GameRecordUI/Lives/LivesLabel
-@onready var score_label: Label = $GameRecordUI/Score/ScoreLabel
+@onready var lives_label: Label = $GameRecordUI/VBoxContainer/Lives/LivesLabel
+@onready var score_label: Label = $GameRecordUI/VBoxContainer/Score/ScoreLabel
 @onready var pacman: BaseCharacter = $Maze/Pacman
 @onready var sfx_pacman_caught_ap: AudioStreamPlayer = $SFXPacmanCaughtAP
+@onready var hs_label: Label = $GameRecordUI/HighestScore/HSLabel
 
 @onready var background: ColorRect = $Background
 
@@ -32,6 +33,8 @@ const GHOST_BLINKY = preload("res://scenes/ghost_blinky.tscn")
 const GAME_START_COUNT_DOWN = preload("res://assets/sound_effects/game_start_count_down.mp3")
 const GHOST_EATEN = preload("res://assets/sound_effects/ghost_eaten.wav")
 const PAUSE = preload("res://assets/sound_effects/pause.mp3")
+const GAME_LOSE = preload("res://assets/sound_effects/game_lose.mp3")
+const GAME_WIN = preload("res://assets/sound_effects/game_win.mp3")
 const BGM_SPECIAL = preload("res://assets/sound_effects/bgm_special.wav")
 const BGM_NORMAL = preload("res://assets/sound_effects/bgm_normal.wav")
 #const FLOOR_TILE_INDEX = Vector2i(4,20)
@@ -51,6 +54,8 @@ var game_started = false
 
 func _ready() -> void:
 	background.color = Color.BLACK
+	hs_label.text = str(GameData.highest_score)
+	_set_path_assist()
 	back_to_main_menucolor_rect.color = GlobalVariables.main_menu_color
 	SignalBus.score_changed.connect(func(score):
 		score_label.text = str(score)
@@ -78,8 +83,6 @@ func _ready() -> void:
 
 	# 首先进入scatter模式
 	scatter_timer.start()
-
-
 
 	# frightened结束后，恢复chase
 	frightened_timer.timeout.connect(func():
@@ -130,16 +133,30 @@ func _input(event: InputEvent) -> void:
 			back_to_main_menu.visible = true
 			back_to_main_menu_no_button.grab_focus()
 			background_music_ap.stop()
+			game_control_ap.stream = PAUSE
 			game_control_ap.play()
 		else:
 			get_tree().paused = false
 			back_to_main_menu.visible = false
+			game_control_ap.stream = PAUSE
 			game_control_ap.play()
 			background_music_ap.play()
 
+func _set_path_assist():
+	if SettingsManager.assist_mode_on:
+		$Maze/BlinkyPathLine2D.visible = true
+		$Maze/ClydePathLine2D.visible = true
+		$Maze/InkyPathLine2D.visible = true
+		$Maze/PinkyPathLine2D.visible = true
+	else:
+		$Maze/BlinkyPathLine2D.visible = false
+		$Maze/ClydePathLine2D.visible = false
+		$Maze/InkyPathLine2D.visible = false
+		$Maze/PinkyPathLine2D.visible = false
 
 func _create_maze():
-	var generator = MazeGenerator.new("cry")
+	print(GameData.seed)
+	var generator = MazeGenerator.new(GameData.seed)
 	var maze = generator.generate_maze_tiles()
 	var dot_cnt = 0
 	for x in MazeGenerator.MAZE_TILE_WIDTH:
@@ -234,19 +251,7 @@ func _on_pacman_caught():
 	sfx_pacman_caught_ap.play()
 	if not GameData.lives_remaining >= 0:
 		return
-	# 鬼魂转为idle
-	ghost_blinky.change_state(ghost_blinky.States.Idle)
-	ghost_clyde.change_state(ghost_clyde.States.Idle)
-	ghost_inky.change_state(ghost_inky.States.Idle)
-	ghost_pinky.change_state(ghost_pinky.States.Idle)
-	# pacman的速度为0
-	pacman.speed = 0
-	pacman.velocity = Vector2i.ZERO
-	# 系统组件暂停
-	background_music_ap.stop()
-	frightened_timer.stop()
-	chase_timer.stop()
-	scatter_timer.stop()
+	_game_freeze_immediately()
 
 	# 静止1秒，重置状态
 	await get_tree().create_timer(1).timeout
@@ -264,11 +269,44 @@ func _on_pacman_caught():
 	ghost_pinky.change_to_action_state()
 	scatter_timer.start()
 
+func _game_freeze_immediately():
+	# 鬼魂转为idle
+	ghost_blinky.change_state(ghost_blinky.States.Idle)
+	ghost_clyde.change_state(ghost_clyde.States.Idle)
+	ghost_inky.change_state(ghost_inky.States.Idle)
+	ghost_pinky.change_state(ghost_pinky.States.Idle)
+	# pacman的速度为0
+	pacman.speed = 0
+	pacman.velocity = Vector2i.ZERO
+	# 系统组件暂停
+	background_music_ap.stop()
+	frightened_timer.stop()
+	chase_timer.stop()
+	scatter_timer.stop()
+
 func _win():
-	print("win")
+	_game_freeze_immediately()
+	game_control_ap.stream = GAME_WIN
+	game_control_ap.play()
+	# 禁用退出菜单，转为强制显示
+	get_tree().paused = true
+	game_started = false
+	back_to_main_menu_no_button.disabled = true
+	back_to_main_menu.visible = true
+
+	back_to_main_menu_yes_button.grab_focus()
 
 func _lose():
-	print("lose")
+	_game_freeze_immediately()
+	game_control_ap.stream = GAME_LOSE
+	game_control_ap.play()
+	# 禁用退出菜单，转为强制显示
+	get_tree().paused = true
+	game_started = false
+	back_to_main_menu_no_button.disabled = true
+	back_to_main_menu.visible = true
+
+	back_to_main_menu_yes_button.grab_focus()
 
 func _on_no_button_pressed() -> void:
 	back_to_main_menu.hide()
@@ -277,6 +315,7 @@ func _on_no_button_pressed() -> void:
 	background_music_ap.play()
 
 func _on_yes_button_pressed() -> void:
+	SettingsManager.save_highest_score()
 	get_tree().paused = false
 	IndieBlueprintSceneTransitioner.transition_to(
 		MAIN_MENU_PATH,
