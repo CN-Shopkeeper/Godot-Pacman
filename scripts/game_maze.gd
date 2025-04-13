@@ -19,6 +19,8 @@ extends Control
 @onready var sfx_power_dot_eaten_ap: AudioStreamPlayer = $SFXPowerDotEatenAP
 @onready var sfx_dot_eaten_ap: AudioStreamPlayer = $SFXDotEatenAP
 @onready var sfx_ghost_eaten_ap: AudioStreamPlayer = $SFXGhostEatenAP
+@onready var lives_label: Label = $GameRecordUI/Lives/LivesLabel
+@onready var score_label: Label = $GameRecordUI/Score/ScoreLabel
 
 @onready var background: ColorRect = $Background
 
@@ -48,7 +50,21 @@ var game_started = false
 func _ready() -> void:
 	background.color = Color.BLACK
 	back_to_main_menucolor_rect.color = GlobalVariables.main_menu_color
+	SignalBus.score_changed.connect(func(score):
+		score_label.text = str(score)
+		)
+	SignalBus.lives_remaining_changed.connect(func(lives):
+		lives_label.text = str(lives)
+		)
+	SignalBus.dot_eaten.connect(_play_dot_eaten)
+	SignalBus.ghost_eaten.connect(func():
+		sfx_ghost_eaten_ap.play()
+		)
+	SignalBus.no_lives_remains.connect(_lose)
+	SignalBus.dot_eaten_all.connect(_win)
+
 	_create_maze()
+	GameData.init_game_record()
 	# 等待地图创建完成后，更新寻路
 	ghost_blinky.update_pathfinding_grid()
 	ghost_clyde.update_pathfinding_grid()
@@ -69,15 +85,13 @@ func _ready() -> void:
 	# 首先进入scatter模式
 	scatter_timer.start()
 
-	SignalBus.dot_eaten.connect(_play_dot_eaten)
-	SignalBus.ghost_eaten.connect(func():
-		sfx_ghost_eaten_ap.play()
-		)
+
 
 	# frightened结束后，恢复chase
 	frightened_timer.timeout.connect(func():
 		background_music_ap.stream = BGM_NORMAL
 		background_music_ap.play()
+		GameData.consecutive_kills_cnt = 0
 
 		ghost_blinky.change_state(ghost_blinky.States.Chase)
 		ghost_clyde.change_state(ghost_clyde.States.Chase)
@@ -205,6 +219,12 @@ func _play_dot_eaten(dot):
 		frightened_timer.start()
 	else:
 		sfx_dot_eaten_ap.play()
+
+func _win():
+	print("win")
+
+func _lose():
+	print("lose")
 
 func _on_no_button_pressed() -> void:
 	back_to_main_menu.hide()

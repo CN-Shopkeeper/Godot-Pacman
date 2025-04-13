@@ -19,4 +19,3 @@ func physics_update(delta: float):
 func exit():
 	ghost_node.timer.stop()
 	ghost_node.visible = true
-

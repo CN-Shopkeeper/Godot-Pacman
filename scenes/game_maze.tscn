@@ -195,9 +195,51 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jvsv4")
 
+[node name="GameRecordUI" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 42.0
+grow_horizontal = 2
+
+[node name="Lives" type="HBoxContainer" parent="GameRecordUI"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LabelTxt" type="Label" parent="GameRecordUI/Lives"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 30
+text = "LIVES:"
+
+[node name="LivesLabel" type="Label" parent="GameRecordUI/Lives"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 30
+text = "1"
+
+[node name="Score" type="HBoxContainer" parent="GameRecordUI"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LabelTxt" type="Label" parent="GameRecordUI/Score"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 30
+text = "SCORE:"
+
+[node name="ScoreLabel" type="Label" parent="GameRecordUI/Score"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 30
+text = "1"
+
 [node name="Maze" type="Node2D" parent="."]
 process_mode = 1
-position = Vector2(448, 60)
+position = Vector2(448, 90)
 scale = Vector2(2, 2)
 
 [node name="FloorLayer" type="TileMapLayer" parent="Maze"]
@@ -319,6 +361,7 @@ layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
 [node name="GameControlAP" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_hk83x")

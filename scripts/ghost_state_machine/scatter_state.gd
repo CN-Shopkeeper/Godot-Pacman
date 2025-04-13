@@ -32,8 +32,6 @@ func physics_update(delta: float):
 			else:
 				scatter_attemp_index = (access_dirs_index[0] + 2)%4
 
-			print(DIRECTIONS[scatter_attemp_index])
-
 	if not reach_scatter_point:
 		ghost_node.update_velocity(ghost_node.get_scatter_coor())
 

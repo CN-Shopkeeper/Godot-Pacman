@@ -53,15 +53,12 @@ func update_velocity(target_coor: Vector2i):
 	target_coor = MazeGenerator.get_nearest_ghost_access_coor(GameData.maze, target_coor.x, target_coor.y)
 
 	path_to_target = pathfinding_grid.get_point_path(world_to_grid(position), target_coor)
-	#print(target_position," size ",path_to_target.size())
 	if path_to_target.size() > 1:
 		var dir = (path_to_target[1]-path_to_target[0]).normalized()
 		now_dir = Vector2i(floor(dir.x), floor(dir.y))
 		velocity = speed * dir
 		if visual_path_line2d:
 			visual_path_line2d.points = path_to_target
-	#for path in path_to_target:
-		#print(path)
 
 func get_normal_texture() -> Texture2D:
 	return preload("res://assets/sprites/ghosts/blue_ghost.png")
@@ -112,7 +109,6 @@ func on_body_entered_func():
 		SignalBus.emit_ghost_eaten()
 		change_state(States.Eaten)
 	elif -1 != ["Chase", "Scatter"].find(current_state_name):
-		#print("catch")
 		pass  # Replace with function body.
 
 
