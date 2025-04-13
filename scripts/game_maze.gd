@@ -224,7 +224,7 @@ func _play_when_game_started():
 	game_started = true
 	# 切换为暂停音效
 	game_control_ap.stream = PAUSE
-
+	background_music_ap.stream = BGM_NORMAL
 	background_music_ap.play()
 
 func _play_dot_eaten(dot):

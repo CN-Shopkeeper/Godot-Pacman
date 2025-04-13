@@ -46,4 +46,3 @@ func _process(_delta):
 			emit_signal("load_done")
 			await Signal(_new_loading_screen, "Loading_screen_starts_removing")
 			get_tree().change_scene_to_packed(_loaded_resource)
-
