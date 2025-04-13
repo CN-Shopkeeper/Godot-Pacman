@@ -8,7 +8,7 @@ func _ready() -> void:
 	reset()
 	SignalBus.clyde_time_to_go.connect(func():
 		is_waiting = false
-		change_state(States.Chase)
+		change_to_action_state()
 		print("clyde coming")
 	)
 

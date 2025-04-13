@@ -87,30 +87,32 @@ func _ready() -> void:
 		background_music_ap.play()
 		GameData.consecutive_kills_cnt = 0
 
-		ghost_blinky.change_state(ghost_blinky.States.Chase)
-		ghost_clyde.change_state(ghost_clyde.States.Chase)
-		ghost_inky.change_state(ghost_inky.States.Chase)
-		ghost_pinky.change_state(ghost_pinky.States.Chase)
+		ghost_blinky.change_to_action_state()
+		ghost_clyde.change_to_action_state()
+		ghost_inky.change_to_action_state()
+		ghost_pinky.change_to_action_state()
 		)
 
 	# chase 20秒后进入 scatter，以frightened优先
 	chase_timer.timeout.connect(func():
 		scatter_timer.start()
+		GameData.now_ghost_action_mode = BaseGhost.States.Scatter
 		if frightened_timer.is_stopped():
-			ghost_blinky.change_state(ghost_blinky.States.Scatter)
-			ghost_clyde.change_state(ghost_clyde.States.Scatter)
-			ghost_inky.change_state(ghost_inky.States.Scatter)
-			ghost_pinky.change_state(ghost_pinky.States.Scatter)
+			ghost_blinky.change_to_action_state()
+			ghost_clyde.change_to_action_state()
+			ghost_inky.change_to_action_state()
+			ghost_pinky.change_to_action_state()
 		)
 
 	# scatter 7秒后进入 chase，以frightened优先
 	scatter_timer.timeout.connect(func():
 		chase_timer.start()
+		GameData.now_ghost_action_mode = BaseGhost.States.Chase
 		if frightened_timer.is_stopped():
-			ghost_blinky.change_state(ghost_blinky.States.Chase)
-			ghost_clyde.change_state(ghost_clyde.States.Chase)
-			ghost_inky.change_state(ghost_inky.States.Chase)
-			ghost_pinky.change_state(ghost_pinky.States.Chase)
+			ghost_blinky.change_to_action_state()
+			ghost_clyde.change_to_action_state()
+			ghost_inky.change_to_action_state()
+			ghost_pinky.change_to_action_state()
 		)
 
 func _physics_process(delta: float) -> void:
@@ -256,10 +258,10 @@ func _on_pacman_caught():
 
 	await _play_when_game_started()
 
-	ghost_blinky.change_state(ghost_blinky.States.Scatter)
-	ghost_clyde.change_state(ghost_clyde.States.Scatter)
-	ghost_inky.change_state(ghost_inky.States.Scatter)
-	ghost_pinky.change_state(ghost_pinky.States.Scatter)
+	ghost_blinky.change_to_action_state()
+	ghost_clyde.change_to_action_state()
+	ghost_inky.change_to_action_state()
+	ghost_pinky.change_to_action_state()
 	scatter_timer.start()
 
 func _win():

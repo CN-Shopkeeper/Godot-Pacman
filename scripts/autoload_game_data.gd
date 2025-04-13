@@ -10,6 +10,8 @@ var lives_remaining: int
 var score: int
 var consecutive_kills_cnt: int
 
+var now_ghost_action_mode
+
 func _ready() -> void:
 	SignalBus.dot_eaten.connect(_on_dot_eaten)
 	SignalBus.ghost_eaten.connect(_on_ghost_eaten)

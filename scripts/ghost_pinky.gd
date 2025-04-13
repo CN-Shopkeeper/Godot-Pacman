@@ -8,7 +8,7 @@ func _ready() -> void:
 	reset()
 	get_tree().create_timer(5).timeout.connect(func():
 		is_waiting = false
-		change_state(States.Scatter))
+		change_to_action_state())
 
 
 func _physics_process(delta: float) -> void:

@@ -17,7 +17,7 @@ func reset():
 	spawn_coor = GlobalVariables.blinky_spawn_coor
 	spawn_pos = grid_to_world(GlobalVariables.blinky_spawn_coor)
 	position = spawn_pos
-	change_state(States.Scatter)
+	change_to_action_state()
 
 func get_normal_texture() -> Texture2D:
 	return preload("res://assets/sprites/ghosts/blinky.png")
