@@ -32,23 +32,7 @@ func _on_play_button_pressed() -> void:
 	else:
 		var timestamp_seconds = Time.get_unix_time_from_system()
 		GameData._seed = str(timestamp_seconds)
-	IndieBlueprintSceneTransitioner.transition_to(
-		GAME_MAP_PATH,
-		IndieBlueprintPremadeTransitions.Dissolve,
-		IndieBlueprintPremadeTransitions.Dissolve,
-		{
-	"in": {
-		"color": GlobalVariables.scene_transition_color,
-		"duration": 1,
-		"texture": IndieBlueprintPremadeTransitions.Squares
-	},
-	"out": {
-		"color": GlobalVariables.scene_transition_color,
-		"duration": 1,
-		"texture": IndieBlueprintPremadeTransitions.Squares
-	},
-}
-		)
+	LoadManager.load_scene(GAME_MAP_PATH)
 
 func _on_settings_button_pressed() -> void:
 	main_buttons_container.hide()
@@ -93,7 +77,6 @@ func _on_sfx_vol_slider_value_changed(value: float) -> void:
 
 
 func _on_assist_mode_toggled(toggled_on: bool) -> void:
-	print("213")
 	SettingsManager.assist_mode_on = toggled_on
 	SettingsManager.save_assist_mode()
 

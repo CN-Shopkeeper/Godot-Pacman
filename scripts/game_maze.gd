@@ -81,9 +81,9 @@ func _ready() -> void:
 	ghost_pinky.update_pathfinding_grid()
 
 	await _play_when_game_started()
-
-	# 首先进入scatter模式
+		# 首先进入scatter模式
 	scatter_timer.start()
+
 
 	# frightened结束后，恢复chase
 	frightened_timer.timeout.connect(func():
@@ -118,6 +118,7 @@ func _ready() -> void:
 			ghost_inky.change_to_action_state()
 			ghost_pinky.change_to_action_state()
 		)
+
 
 func _physics_process(_delta: float) -> void:
 	if not frightened_timer.is_stopped():
@@ -321,20 +322,5 @@ func _on_no_button_pressed() -> void:
 func _on_yes_button_pressed() -> void:
 	SettingsManager.save_highest_score()
 	get_tree().paused = false
-	IndieBlueprintSceneTransitioner.transition_to(
-		MAIN_MENU_PATH,
-		IndieBlueprintPremadeTransitions.Dissolve,
-		IndieBlueprintPremadeTransitions.Dissolve,
-				{
-	"in": {
-		"color": GlobalVariables.scene_transition_color,
-		"duration": 1,
-		"texture": IndieBlueprintPremadeTransitions.Squares
-	},
-	"out": {
-		"color": GlobalVariables.scene_transition_color,
-		"duration": 1,
-		"texture": IndieBlueprintPremadeTransitions.Squares
-	},
-}
-	)
+
+	LoadManager.load_scene(MAIN_MENU_PATH)

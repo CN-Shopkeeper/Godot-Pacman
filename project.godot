@@ -26,7 +26,7 @@ SignalBus="*res://scripts/autoload_signal_bus.gd"
 GameData="*res://scripts/autoload_game_data.gd"
 SettingsManager="*res://scripts/aultoload_settings_manager.gd"
 GlobalVariables="*res://scripts/autoload_global_variables.gd"
-IndieBlueprintSceneTransitioner="*res://addons/ninetailsrabbit.indie_blueprint_scene_transition/src/scene_transitioner.tscn"
+LoadManager="*res://scripts/autoload_load_manager.gd"
 
 [display]
 
@@ -37,7 +37,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/SimpleTODO/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/animatedbutton/plugin.cfg", "res://addons/ninetailsrabbit.indie_blueprint_scene_transition/plugin.cfg")
+enabled=PackedStringArray("res://addons/SimpleTODO/plugin.cfg", "res://addons/Todo_Manager/plugin.cfg", "res://addons/animatedbutton/plugin.cfg")
 
 [input]
 
