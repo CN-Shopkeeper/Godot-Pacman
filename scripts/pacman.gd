@@ -14,7 +14,11 @@ var direction = D_RIGHT
 var next_direction = Vector2i.ZERO
 
 func _ready() -> void:
+	reset()
+
+func reset():
 	speed = 256
+	velocity = Vector2.ZERO
 	position = grid_to_world(GlobalVariables.pacman_spawn_coor)
 
 

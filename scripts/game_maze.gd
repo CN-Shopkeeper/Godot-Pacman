@@ -21,6 +21,8 @@ extends Control
 @onready var sfx_ghost_eaten_ap: AudioStreamPlayer = $SFXGhostEatenAP
 @onready var lives_label: Label = $GameRecordUI/Lives/LivesLabel
 @onready var score_label: Label = $GameRecordUI/Score/ScoreLabel
+@onready var pacman: BaseCharacter = $Maze/Pacman
+@onready var sfx_pacman_caught_ap: AudioStreamPlayer = $SFXPacmanCaughtAP
 
 @onready var background: ColorRect = $Background
 
@@ -60,6 +62,7 @@ func _ready() -> void:
 	SignalBus.ghost_eaten.connect(func():
 		sfx_ghost_eaten_ap.play()
 		)
+	SignalBus.pacman_caught.connect(_on_pacman_caught)
 	SignalBus.no_lives_remains.connect(_lose)
 	SignalBus.dot_eaten_all.connect(_win)
 
@@ -71,17 +74,8 @@ func _ready() -> void:
 	ghost_inky.update_pathfinding_grid()
 	ghost_pinky.update_pathfinding_grid()
 
-	# 游戏开始音效
-	get_tree().paused = true
-	game_control_ap.stream = GAME_START_COUNT_DOWN
-	game_control_ap.play()
-	await game_control_ap.finished
-	get_tree().paused = false
-	game_started = true
-	# 切换为暂停音效
-	game_control_ap.stream = PAUSE
+	await _play_when_game_started()
 
-	background_music_ap.play()
 	# 首先进入scatter模式
 	scatter_timer.start()
 
@@ -199,6 +193,20 @@ func _create_maze():
 
 	GameData.init_maze(maze, dot_cnt)
 
+func _play_when_game_started():
+	# 游戏开始音效
+	game_started = false
+	get_tree().paused = true
+	game_control_ap.stream = GAME_START_COUNT_DOWN
+	game_control_ap.play()
+	await game_control_ap.finished
+	get_tree().paused = false
+	game_started = true
+	# 切换为暂停音效
+	game_control_ap.stream = PAUSE
+
+	background_music_ap.play()
+
 func _play_dot_eaten(dot):
 	if "power_dot" == dot:
 		sfx_power_dot_eaten_ap.play()
@@ -219,6 +227,40 @@ func _play_dot_eaten(dot):
 		frightened_timer.start()
 	else:
 		sfx_dot_eaten_ap.play()
+
+func _on_pacman_caught():
+	sfx_pacman_caught_ap.play()
+	if not GameData.lives_remaining >= 0:
+		return
+	# 鬼魂转为idle
+	ghost_blinky.change_state(ghost_blinky.States.Idle)
+	ghost_clyde.change_state(ghost_clyde.States.Idle)
+	ghost_inky.change_state(ghost_inky.States.Idle)
+	ghost_pinky.change_state(ghost_pinky.States.Idle)
+	# pacman的速度为0
+	pacman.speed = 0
+	pacman.velocity = Vector2i.ZERO
+	# 系统组件暂停
+	background_music_ap.stop()
+	frightened_timer.stop()
+	chase_timer.stop()
+	scatter_timer.stop()
+
+	# 静止1秒，重置状态
+	await get_tree().create_timer(1).timeout
+	pacman.reset()
+	ghost_blinky.reset()
+	ghost_clyde.reset()
+	ghost_inky.reset()
+	ghost_pinky.reset()
+
+	await _play_when_game_started()
+
+	ghost_blinky.change_state(ghost_blinky.States.Scatter)
+	ghost_clyde.change_state(ghost_clyde.States.Scatter)
+	ghost_inky.change_state(ghost_inky.States.Scatter)
+	ghost_pinky.change_state(ghost_pinky.States.Scatter)
+	scatter_timer.start()
 
 func _win():
 	print("win")

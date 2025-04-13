@@ -109,7 +109,7 @@ func on_body_entered_func():
 		SignalBus.emit_ghost_eaten()
 		change_state(States.Eaten)
 	elif -1 != ["Chase", "Scatter"].find(current_state_name):
-		pass  # Replace with function body.
+		SignalBus.emit_pacman_caught()
 
 
 func is_return_to_spawn():

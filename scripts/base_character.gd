@@ -8,6 +8,9 @@ const D_DOWN = Vector2i.DOWN
 
 var speed: float
 
+func reset():
+	pass
+
 # 是否处于新的路口
 func is_at_intersection() -> bool:
 	var grid_pos = world_to_grid(position)

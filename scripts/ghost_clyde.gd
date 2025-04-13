@@ -5,9 +5,7 @@ extends BaseGhost
 func _ready() -> void:
 	super._ready()
 	#visual_path_line2d.global_position = GlobalVariables.tile_size/2
-	spawn_coor = GlobalVariables.clyde_spawn_coor
-	spawn_pos = grid_to_world(GlobalVariables.clyde_spawn_coor)
-	position = spawn_pos
+	reset()
 	SignalBus.clyde_time_to_go.connect(func():
 		is_waiting = false
 		change_state(States.Chase)
@@ -17,6 +15,11 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	fsm.physics_update(delta)
 	move_and_slide()
+
+func reset():
+	spawn_coor = GlobalVariables.clyde_spawn_coor
+	spawn_pos = grid_to_world(GlobalVariables.clyde_spawn_coor)
+	position = spawn_pos
 
 func get_normal_texture() -> Texture2D:
 	return preload("res://assets/sprites/ghosts/clyde.png")

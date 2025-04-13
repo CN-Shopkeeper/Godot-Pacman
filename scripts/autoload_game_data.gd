@@ -13,6 +13,7 @@ var consecutive_kills_cnt: int
 func _ready() -> void:
 	SignalBus.dot_eaten.connect(_on_dot_eaten)
 	SignalBus.ghost_eaten.connect(_on_ghost_eaten)
+	SignalBus.pacman_caught.connect(lives_reduce)
 
 func init_game_record():
 	lives_remaining = 2
@@ -25,8 +26,7 @@ func lives_reduce():
 	if lives_remaining > 0:
 		lives_remaining -= 1
 		SignalBus.emit_lives_remaining_changed(lives_remaining)
-
-	if 0 == lives_remaining:
+	elif lives_remaining == 0:
 		SignalBus.emit_no_lives_remains()
 
 
