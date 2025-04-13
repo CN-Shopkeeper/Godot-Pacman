@@ -24,6 +24,7 @@ extends Control
 @onready var pacman: BaseCharacter = $Maze/Pacman
 @onready var sfx_pacman_caught_ap: AudioStreamPlayer = $SFXPacmanCaughtAP
 @onready var hs_label: Label = $GameRecordUI/HighestScore/HSLabel
+@onready var message_label: Label = $BackToMainMenu/VBoxContainer/MessageLabel
 
 @onready var background: ColorRect = $Background
 
@@ -290,6 +291,8 @@ func _win():
 	game_control_ap.play()
 	# 禁用退出菜单，转为强制显示
 	get_tree().paused = true
+	message_label.visible = true
+	message_label.text = "Win!"
 	game_started = false
 	back_to_main_menu_no_button.disabled = true
 	back_to_main_menu.visible = true
@@ -302,6 +305,8 @@ func _lose():
 	game_control_ap.play()
 	# 禁用退出菜单，转为强制显示
 	get_tree().paused = true
+	message_label.visible = true
+	message_label.text = "Lose..."
 	game_started = false
 	back_to_main_menu_no_button.disabled = true
 	back_to_main_menu.visible = true

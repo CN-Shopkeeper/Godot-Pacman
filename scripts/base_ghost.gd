@@ -39,7 +39,9 @@ func change_state(new_state: States):
 	now_state = new_state
 
 func change_to_action_state():
-	change_state(GameData.now_ghost_action_mode)
+	# eaten状态只能进入idle状态
+	if now_state != States.Eaten:
+		change_state(GameData.now_ghost_action_mode)
 
 func update_pathfinding_grid():
 	pathfinding_grid.region = floor_layer.get_used_rect()

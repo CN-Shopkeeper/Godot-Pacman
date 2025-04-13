@@ -1,6 +1,6 @@
 extends Node
 
-var seed
+var seed = "test"
 
 var maze
 var dot_cnt_total: int
