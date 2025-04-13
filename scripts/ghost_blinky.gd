@@ -29,6 +29,6 @@ func get_scatter_coor() -> Vector2i:
 	return GlobalVariables.top_right_corner_coor
 
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
+func _on_area_2d_body_entered(_body: Node2D) -> void:
 	# 默认只有pacman与之交互碰撞
 	on_body_entered_func()

@@ -22,7 +22,7 @@ func reset():
 	position = grid_to_world(GlobalVariables.pacman_spawn_coor)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("move_up"):
 		next_direction = D_UP
 	if Input.is_action_just_pressed("move_down"):

@@ -1,5 +1,5 @@
 extends Control
-@onready var maze: Node2D = $Maze
+@onready var maze_node: Node2D = $Maze
 @onready var back_to_main_menucolor_rect: ColorRect = $BackToMainMenu/ColorRect
 @onready var back_to_main_menu: CenterContainer = $BackToMainMenu
 @onready var back_to_main_menu_no_button: AnimatedButton = $BackToMainMenu/VBoxContainer/HBoxContainer/No
@@ -119,13 +119,13 @@ func _ready() -> void:
 			ghost_pinky.change_to_action_state()
 		)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not frightened_timer.is_stopped():
 		GameData.frightened_time_left = frightened_timer.time_left
 	else:
 		GameData.frightened_time_left = 0
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_pause"):
 		if not game_started:
 			return
@@ -156,8 +156,7 @@ func _set_path_assist():
 		$Maze/PinkyPathLine2D.visible = false
 
 func _create_maze():
-	print(GameData.seed)
-	var generator = MazeGenerator.new(GameData.seed)
+	var generator = MazeGenerator.new(GameData._seed)
 	var maze = generator.generate_maze_tiles()
 	var dot_cnt = 0
 	for x in MazeGenerator.MAZE_TILE_WIDTH:

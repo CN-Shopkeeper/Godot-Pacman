@@ -12,9 +12,9 @@ func exit():
 	pass
 
 # 每帧更新逻辑
-func update(delta: float):
+func update(_delta: float):
 	pass
 
 # 物理帧更新逻辑
-func physics_update(delta: float):
+func physics_update(_delta: float):
 	pass

@@ -17,12 +17,12 @@ const GHOST_GATE_CELL_TOP = 3
 
 var rng: RandomNumberGenerator
 
-func _init(seed: String) -> void:
+func _init(_seed: String) -> void:
 	rng = RandomNumberGenerator.new()
-	rng.set_seed(seed.hash())
+	rng.set_seed(_seed.hash())
 
-func reset_seed(seed: String):
-	rng.set_seed(seed.hash())
+func reset_seed(_seed: String):
+	rng.set_seed(_seed.hash())
 
 # 一格cell对应三个tiles，详见参考算法
 
@@ -90,7 +90,8 @@ func _generate_maze_paths():
 	half_maze_paths.fill(Maze_tile.WALL)
 	for index in range(half_cell_height * half_cell_width):
 		var cell_x = index % half_cell_width
-		var cell_y = int(index / half_cell_width)
+		@warning_ignore("integer_division")
+		var cell_y = floor(index / half_cell_width)
 		var flag = _get_half_maze_cell(half_maze_cells, cell_x, cell_y)
 		for x in range(3):
 			for y in range(3):
@@ -140,14 +141,12 @@ func _generate_tetris_cells_bfs(half_maze_cells: Array, start_x: int, start_y: i
 	var tc_cnt = _select_tetris_cell_count()
 	var candidate_queue: Array = []
 	candidate_queue.append(Vector2i(start_x, start_y))
-	var cnt = 0
 	while tc_cnt > 0 and !candidate_queue.is_empty():
 		var now_cell_pos = candidate_queue.pop_front()
 		var x = now_cell_pos.x
 		var y = now_cell_pos.y
 		_set_half_maze_cell(half_maze_cells, x, y, flag)
 		tc_cnt -= 1
-		cnt += 1
 
 		var cell_neighbors = []
 		# 左边邻居如果未访问

@@ -9,7 +9,7 @@ func enter():
 	ghost_node.speed = ghost_node.FRIGHTENED_SPEED
 
 
-func physics_update(delta: float):
+func physics_update(_delta: float):
 	if GameData.frightened_time_left > 0 and GameData.frightened_time_left <= 3.0 and ghost_node.timer.is_stopped():
 		ghost_node.timer.start()
 	if GameData.frightened_time_left > 3 and not ghost_node.timer.is_stopped():

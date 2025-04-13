@@ -11,7 +11,7 @@ func enter():
 	ghost_node.modulate = Color.WHITE
 	ghost_node.speed = ghost_node.CHASE_BASE_SPEED
 
-func physics_update(delta: float):
+func physics_update(_delta: float):
 	if not ghost_node.is_at_intersection():
 		return
 	var now_coor = ghost_node.world_to_grid(ghost_node.position)

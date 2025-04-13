@@ -16,7 +16,6 @@ extends Control
 @onready var seed_line_edit: LineEdit = $HBoxContainer/SeedLineEdit
 
 const GAME_MAP_PATH = "res://scenes/game_maze.tscn"
-
 func _ready() -> void:
 	background.color = GlobalVariables.main_menu_color
 	SettingsManager.load_settings()
@@ -29,10 +28,10 @@ func _ready() -> void:
 
 func _on_play_button_pressed() -> void:
 	if seed_line_edit.text:
-		GameData.seed = seed_line_edit.text
+		GameData._seed = seed_line_edit.text
 	else:
 		var timestamp_seconds = Time.get_unix_time_from_system()
-		GameData.seed = str(timestamp_seconds)
+		GameData._seed = str(timestamp_seconds)
 	IndieBlueprintSceneTransitioner.transition_to(
 		GAME_MAP_PATH,
 		IndieBlueprintPremadeTransitions.Dissolve,

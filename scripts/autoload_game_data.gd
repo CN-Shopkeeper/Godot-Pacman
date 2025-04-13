@@ -1,6 +1,7 @@
 extends Node
 
-var seed = "test"
+# warning-ignore:UNUSED_PRIVATE_CLASS_VARIABLE
+var _seed = "test"
 
 var maze
 var dot_cnt_total: int

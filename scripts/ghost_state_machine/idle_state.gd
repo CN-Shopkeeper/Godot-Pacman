@@ -7,5 +7,5 @@ func enter():
 	ghost_node.speed = 0
 	ghost_node.velocity = Vector2.ZERO
 
-func physics_update(delta: float):
+func physics_update(_delta: float):
 	pass

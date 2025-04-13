@@ -7,7 +7,7 @@ func enter():
 	ghost_node.modulate = Color(1, 1, 1, 0.5)
 	ghost_node.speed = ghost_node.EATEN_SPEED
 
-func physics_update(delta: float):
+func physics_update(_delta: float):
 	if ghost_node.is_return_to_spawn():
 		ghost_node.change_state(BaseGhost.States.Idle)
 		get_tree().create_timer(1).timeout.connect(func():

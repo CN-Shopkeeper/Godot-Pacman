@@ -37,5 +37,5 @@ func get_scatter_coor() -> Vector2i:
 	return GlobalVariables.bottom_left_corner_coor
 
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
+func _on_area_2d_body_entered(_body: Node2D) -> void:
 	on_body_entered_func()
