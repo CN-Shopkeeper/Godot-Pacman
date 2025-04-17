@@ -54,6 +54,14 @@ const GHOST_SPAWN_FLOOR_TILE_INDEX = Vector2i(0, 3)
 var game_started = false
 
 func _ready() -> void:
+	$GameRecordUI/VBoxContainer/Lives/LabelTxt.set_text(tr("lives_txt_label"))
+	$GameRecordUI/VBoxContainer/Score/LabelTxt.set_text(tr("score_txt_label"))
+	$GameRecordUI/HighestScore/LabelTxt.set_text(tr("highest_score_txt_label"))
+	$BackToMainMenu/VBoxContainer/Label.set_text(tr("back_to_main_label"))
+	$BackToMainMenu/VBoxContainer/HBoxContainer/No.set_text(tr("no_bt"))
+	$BackToMainMenu/VBoxContainer/HBoxContainer/Yes.set_text(tr("yes_bt"))
+	
+	
 	background.color = Color.BLACK
 	hs_label.text = str(GameData.highest_score)
 	_set_path_assist()
@@ -292,7 +300,7 @@ func _win():
 	# 禁用退出菜单，转为强制显示
 	get_tree().paused = true
 	message_label.visible = true
-	message_label.text = "Win!"
+	message_label.text = tr("message_win_label")
 	game_started = false
 	back_to_main_menu_no_button.disabled = true
 	back_to_main_menu.visible = true
@@ -306,7 +314,7 @@ func _lose():
 	# 禁用退出菜单，转为强制显示
 	get_tree().paused = true
 	message_label.visible = true
-	message_label.text = "Lose..."
+	message_label.text = tr("message_lose_label")
 	game_started = false
 	back_to_main_menu_no_button.disabled = true
 	back_to_main_menu.visible = true

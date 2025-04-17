@@ -13,10 +13,13 @@ extends Control
 @onready var credits_menu_back_button: AnimatedButton = $CenterContainer/CreditsMenu/Back
 @onready var background: ColorRect = $Background
 @onready var assist_mode_check_box: CheckBox = $CenterContainer/SettingsMenu/AssistMode
-@onready var seed_line_edit: LineEdit = $HBoxContainer/SeedLineEdit
+@onready var seed_line_edit: LineEdit = $LeftBottomContainer/SeedLineEdit
 
 const GAME_MAP_PATH = "res://scenes/game_maze.tscn"
 func _ready() -> void:
+	_set_localization()
+	$LanguageButton.set_text("中文/ENGLISH")
+	
 	background.color = GlobalVariables.main_menu_color
 	SettingsManager.load_settings()
 	play_button.grab_focus()
@@ -26,6 +29,23 @@ func _ready() -> void:
 	sfx_vol_slider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
 	assist_mode_check_box.set_pressed_no_signal(SettingsManager.assist_mode_on)
 
+func _set_localization():
+	$Title.set_text(tr("title_label"))
+	$CenterContainer/MainButtons/Play.set_text(tr("play_bt"))
+	$CenterContainer/MainButtons/Settings.set_text(tr("settings_bt"))
+	$CenterContainer/MainButtons/Credits.set_text(tr("credits_bt"))
+	$CenterContainer/MainButtons/Quit.set_text(tr("quit_bt"))
+	$CenterContainer/SettingsMenu/Back.set_text(tr("back_bt"))
+	$CenterContainer/SettingsMenu/Fullscreen.set_text(tr("fullscreen_cb"))
+	$CenterContainer/SettingsMenu/AssistMode.set_text(tr("assist_mode_cb"))
+	$CenterContainer/SettingsMenu/MainVolSlider/Label.set_text(tr("main_volume_slide"))
+	$CenterContainer/SettingsMenu/MusicVolSlider/Label.set_text(tr("music_volume_slide"))
+	$CenterContainer/SettingsMenu/SFXVolSlider/Label.set_text(tr("sfx_volume_slide"))
+	$CenterContainer/CreditsMenu/Back.set_text(tr("back_bt"))
+	$CenterContainer/CreditsMenu/Label.set_text(tr("credits_label"))
+	$LeftBottomContainer/SeedCheckBox.set_text(tr("set_seed_cb"))
+	$LeftBottomContainer/SeedLineEdit.set_placeholder(tr("set_seed_placeholder_le"))
+	
 func _on_play_button_pressed() -> void:
 	if seed_line_edit.text:
 		GameData._seed = seed_line_edit.text
@@ -82,3 +102,12 @@ func _on_assist_mode_toggled(toggled_on: bool) -> void:
 
 func _on_seed_check_box_toggled(toggled_on: bool) -> void:
 	seed_line_edit.visible = toggled_on
+
+
+func _on_language_button_pressed() -> void:
+	if "zh" == TranslationServer.get_locale():
+		SettingsManager.set_and_save_language_preference("en")
+	else:
+		SettingsManager.set_and_save_language_preference("zh")
+		
+	_set_localization()

@@ -1,0 +1,23 @@
+keys,en,zh
+title_label,Godot Pacman,吃豆人戈多
+play_bt,PLAY,开始游戏
+settings_bt,SETTINGS,设置
+credits_bt,CREDITS,制作人员
+quit_bt,QUIT,退出游戏
+back_bt,BACK,返回
+fullscreen_cb,FULLSCREEN,全屏显示
+assist_mode_cb,ASSIST MODE,辅助模式
+main_volume_slide,MAIN VOLUME,主音量
+music_volume_slide,MUSIC VOLUME,音乐音量
+sfx_volume_slide,SFX VOLUME,音效音量
+credits_label,A Game By Shopkeeper,Shopkeeper制作的游戏
+set_seed_cb,SET GAME SEED?,自定义游戏种子？
+set_seed_placeholder_le,INPUT YOUR SEED,在此输入游戏种子
+lives_txt_label,LIVES:,剩余生命：
+score_txt_label,SCORE:,得分：
+highest_score_txt_label,HIGHEST SCORE:,历史最高分：
+message_win_label,Win!,胜利！
+message_lose_label,Lose...,失败。。。
+back_to_main_label,BACK TO MAIN MENU?,返回主菜单？
+yes_bt,YES,是
+no_bt,NO,否

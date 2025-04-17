@@ -17,6 +17,8 @@ func load_settings():
 	var err = config.load(SETTINGS_FILE)
 
 	if err == OK:  # 文件加载成功
+		# 语言设置
+		var saved_lang = config.get_value("settings", "language", "zh")
 		# 加载全屏设置
 		var is_fullscreen = config.get_value("display", "fullscreen", false)
 		# 加载音量设置
@@ -29,13 +31,14 @@ func load_settings():
 		# 加载辅助模式
 		assist_mode_on = config.get_value("game_play", "assist_mode", false)
 
-
+		_set_language_preference(saved_lang)
 		_set_fullscreen(is_fullscreen)
 		_set_volume("Master", master_volume)
 		_set_volume("Music", music_volume)
 		_set_volume("SFX", sfx_volume)
 	else:
 		# 文件不存在，使用默认设置
+		set_and_save_language_preference(OS.get_locale())
 		set_and_save_volume("Master", 0.5)  # 默认主音量
 		set_and_save_volume("Music", 0.5)  # 默认音乐音量
 		set_and_save_volume("SFX", 0.5)  # 默认音效音量
@@ -50,6 +53,13 @@ func save_assist_mode():
 func save_highest_score():
 	if GameData.score > GameData.highest_score:
 		config.set_value("data", "highest_score", GameData.score)
+	_save_settings()
+
+# 保存全屏设置
+func set_and_save_language_preference(lang_code: String):
+	_set_language_preference(lang_code)
+
+	config.set_value("settings", "language", lang_code)
 	_save_settings()
 
 # 保存全屏设置
@@ -70,6 +80,8 @@ func set_and_save_volume(bus_name: StringName, volumn: float):
 		config.set_value("audio", "sfx_volume", volumn)
 	_save_settings()
 
+func _set_language_preference(lang_code: String):
+	TranslationServer.set_locale(lang_code)
 
 func _set_fullscreen(_is_fullscreen: bool):
 	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if _is_fullscreen else DisplayServer.WINDOW_MODE_MAXIMIZED
